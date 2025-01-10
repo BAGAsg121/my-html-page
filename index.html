@@ -14,7 +14,7 @@
         form {
             margin-top: 30px;
         }
-        input[type="text"], input[type="tel"] {
+        input[type="text"], input[type="tel"], input[type="email"] {
             padding: 10px;
             margin: 10px;
             width: 200px;
@@ -30,14 +30,16 @@
 </head>
 <body>
     <h1>Signup</h1>
-    <p>Please enter your name and phone number to sign up.</p>
+    <p>Please enter your name, phone number, and email to sign up.</p>
 
-    <!-- Signup Form to collect name and phone number -->
+    <!-- Signup Form to collect name, phone number, and email -->
     <form id="signupForm">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" required><br>
         <label for="phone">Phone Number:</label><br>
         <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
         <input type="submit" value="Sign Up">
     </form>
 
@@ -48,7 +50,7 @@
     </script>
     <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siq546da70b85967ba4160f65aa2f7fcd1f0054bc67f0538fb0412db2a90a25472eeab3f2c6f521033994aeacca51162815" defer></script>
 
-    <!-- Script to handle signup and set contact number -->
+    <!-- Script to handle signup and set visitor details -->
     <script>
         // Wait until Zoho SalesIQ is ready
         $zoho.salesiq.ready = function() {
@@ -58,29 +60,32 @@
             document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault(); // Prevent page refresh
 
-                // Get name and phone number from the form
+                // Get name, phone number, and email from the form
                 var name = document.getElementById("name").value;
                 var phone = document.getElementById("phone").value;
+                var email = document.getElementById("email").value;
 
-                console.log("Phone entered: " + phone);
+                console.log("Name: " + name);
+                console.log("Phone: " + phone);
+                console.log("Email: " + email);
 
-                // Use setTimeout to delay the setting of the phone number
+                // Set visitor's details in SalesIQ
                 setTimeout(function() {
-                    // Set the phone number in SalesIQ
-                    $zoho.salesiq.visitor.contactnumber(phone);
-                    console.log("Phone number set in SalesIQ: " + phone);
-                    
-                    // Optionally set the name (can be used for further customizations)
-                    $zoho.salesiq.visitor.name(name);
-                    console.log("Visitor Name: " + name);
+                    $zoho.salesiq.visitor.name(name); // Set visitor's name
+                    console.log("Visitor Name set in SalesIQ: " + name);
+
+                    $zoho.salesiq.visitor.contactnumber(phone); // Set visitor's phone number
+                    console.log("Visitor Phone set in SalesIQ: " + phone);
+
+                    $zoho.salesiq.visitor.email(email); // Set visitor's email
+                    console.log("Visitor Email set in SalesIQ: " + email);
                 }, 2000); // Delay by 2 seconds
 
-                // Keep the form data on the page (no page reload)
-                document.getElementById("signupForm").style.display = "none";  // Hide the form
-                document.body.innerHTML += "<p>Thank you for signing up, " + name + "! Your phone number (" + phone + ") has been recorded.</p>";
+                // Display confirmation and keep the page static
+                document.getElementById("signupForm").style.display = "none"; // Hide the form
+                document.body.innerHTML += "<p>Thank you for signing up, " + name + "! Your phone number (" + phone + ") and email (" + email + ") have been recorded.</p>";
             }
         };
     </script>
-
 </body>
 </html>
