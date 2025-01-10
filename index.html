@@ -11,13 +11,64 @@
             text-align: center;
             margin-top: 50px;
         }
+        form {
+            margin-top: 30px;
+        }
+        input[type="text"], input[type="tel"] {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>testbughumai</h1>
 
+    <!-- Form to collect user name and phone number -->
+    <form id="visitorForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="phone">Phone Number:</label><br>
+        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required><br>
+        <input type="submit" value="Submit">
+    </form>
+
     <!-- Zoho SalesIQ Zobot Embed Code -->
     <script>window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}</script>
     <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siq546da70b85967ba4160f65aa2f7fcd1f0054bc67f0538fb0412db2a90a25472eeab3f2c6f521033994aeacca51162815" defer></script>
+
+    <!-- Script to handle form submission and set contact number -->
+    <script>
+        // Wait until Zoho SalesIQ is ready
+        $zoho.salesiq.ready = function() {
+            // Handle form submission
+            document.getElementById("visitorForm").onsubmit = function(event) {
+                event.preventDefault(); // Prevent page refresh
+                
+                // Get values from the form
+                var name = document.getElementById("name").value;
+                var phone = document.getElementById("phone").value;
+                
+                // Set the phone number in SalesIQ
+                $zoho.salesiq.visitor.contactnumber(phone);
+                
+                // Optionally, you can log the name to SalesIQ or use it for further actions
+                console.log("Visitor Name: " + name);
+                console.log("Visitor Phone: " + phone);
+                
+                // Keep the form data on the page (no page reload)
+                document.getElementById("visitorForm").style.display = "none";  // Hide the form
+                document.body.innerHTML += "<p>Thank you, " + name + "! Your phone number (" + phone + ") has been recorded.</p>";
+            }
+        }
+    </script>
+
 </body>
 </html>
