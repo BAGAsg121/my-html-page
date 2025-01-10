@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My HTML Page</title>
+    <title>Signup Page</title>
     <style>
         body {
             background-color: lightblue;
@@ -14,7 +14,7 @@
         form {
             margin-top: 30px;
         }
-        input[type="text"], input[type="tel"] {
+        input[type="tel"] {
             padding: 10px;
             margin: 10px;
             width: 200px;
@@ -29,43 +29,40 @@
     </style>
 </head>
 <body>
-    <h1>testbughumai</h1>
+    <h1>Signup</h1>
+    <p>Please enter your phone number to sign up.</p>
 
-    <!-- Form to collect user name and phone number -->
-    <form id="visitorForm">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br>
+    <!-- Signup Form to collect phone number -->
+    <form id="signupForm">
         <label for="phone">Phone Number:</label><br>
         <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Sign Up">
     </form>
 
     <!-- Zoho SalesIQ Zobot Embed Code (Updated) -->
     <script>window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}</script>
     <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siqfc3be9e5a85a8727368dd917b59056c222b64dbd33bd017b6b35b1ccb3668a58" defer></script>
 
-    <!-- Script to handle form submission and set contact number -->
+    <!-- Script to handle signup and set contact number -->
     <script>
         // Wait until Zoho SalesIQ is ready
         $zoho.salesiq.ready = function() {
-            // Handle form submission
-            document.getElementById("visitorForm").onsubmit = function(event) {
+            // Handle signup form submission
+            document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault(); // Prevent page refresh
                 
-                // Get values from the form
-                var name = document.getElementById("name").value;
+                // Get phone number from the form
                 var phone = document.getElementById("phone").value;
                 
-                // Set the phone number in SalesIQ
+                // Set the phone number in SalesIQ (Simulating login)
                 $zoho.salesiq.visitor.contactnumber(phone);
                 
-                // Optionally, you can log the name to SalesIQ or use it for further actions
-                console.log("Visitor Name: " + name);
-                console.log("Visitor Phone: " + phone);
+                // Simulate a successful login
+                console.log("User Logged In with Phone: " + phone);
                 
-                // Keep the form data on the page (no page reload)
-                document.getElementById("visitorForm").style.display = "none";  // Hide the form
-                document.body.innerHTML += "<p>Thank you, " + name + "! Your phone number (" + phone + ") has been recorded.</p>";
+                // Hide the signup form and show a success message
+                document.getElementById("signupForm").style.display = "none";  // Hide the form
+                document.body.innerHTML += "<p>Thank you for signing up! Your phone number (" + phone + ") has been recorded.</p>";
             }
         }
     </script>
