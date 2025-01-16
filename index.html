@@ -61,7 +61,7 @@
         // Function to create a ticket in Zoho Desk
         function createZohoDeskTicket(userId, name, phone, email) {
             var requestBody = {
-                departmentId: "YOUR_DEPARTMENT_ID", // Replace with your Zoho Desk department ID
+                departmentId: "Y40373000000278063", // Replace with your Zoho Desk department ID
                 subject: "New Signup: " + name,
                 description: "User ID: " + userId + "\nPhone: " + phone + "\nEmail: " + email,
                 email: email,
@@ -70,11 +70,11 @@
                 priority: "High"
             };
 
-            fetch("https://desk.zoho.com/api/v1/tickets", {
+            fetch("https://desk.zoho.in/api/v1/tickets", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Zoho-oauthtoken YOUR_ACCESS_TOKEN" // Replace with your Zoho OAuth token
+                    "Authorization": "Zoho-oauthtoken 1000.9bdc5c16d0eec506fd564c2d4ee22e6a.a78507c928adfeb524f09f69b0a3cadf" // Replace with your Zoho OAuth token
                 },
                 body: JSON.stringify(requestBody)
             })
