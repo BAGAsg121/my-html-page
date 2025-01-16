@@ -30,16 +30,22 @@
 </head>
 <body>
     <h1>Signup</h1>
-    <p>Please enter your name, phone number, and email to sign up.</p>
+    <p>Please enter your User ID, name, phone number, and email to sign up.</p>
 
-    <!-- Signup Form to collect name, phone number, and email -->
+    <!-- Signup Form to collect user ID, name, phone number, and email -->
     <form id="signupForm">
+        <label for="userid">User ID:</label><br>
+        <input type="text" id="userid" name="userid" required><br>
+
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" required><br>
+
         <label for="phone">Phone Number:</label><br>
         <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required><br>
+
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
+
         <input type="submit" value="Sign Up">
     </form>
 
@@ -60,17 +66,25 @@
             document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault(); // Prevent page refresh
 
-                // Get name, phone number, and email from the form
+                // Get user ID, name, phone number, and email from the form
+                var userId = document.getElementById("userid").value;
                 var name = document.getElementById("name").value;
                 var phone = document.getElementById("phone").value;
                 var email = document.getElementById("email").value;
 
+                console.log("User ID: " + userId);
                 console.log("Name: " + name);
                 console.log("Phone: " + phone);
                 console.log("Email: " + email);
 
                 // Set visitor's details in SalesIQ
                 setTimeout(function() {
+                    $zoho.salesiq.visitor.uniqueuserid(userId); // Set visitor's unique User ID
+                    console.log("Visitor Unique User ID set in SalesIQ: " + userId);
+
+                    $zoho.salesiq.visitor.customfield("UserID", userId); // Set visitor's User ID
+                    console.log("Visitor User ID set in SalesIQ: " + userId);
+
                     $zoho.salesiq.visitor.name(name); // Set visitor's name
                     console.log("Visitor Name set in SalesIQ: " + name);
 
@@ -83,7 +97,7 @@
 
                 // Display confirmation and keep the page static
                 document.getElementById("signupForm").style.display = "none"; // Hide the form
-                document.body.innerHTML += "<p>Thank you for signing up, " + name + "! Your phone number (" + phone + ") and email (" + email + ") have been recorded.</p>";
+                document.body.innerHTML += "<p>Thank you for signing up, " + name + "! Your User ID (" + userId + "), phone number (" + phone + "), and email (" + email + ") have been recorded.</p>";
             }
         };
     </script>
