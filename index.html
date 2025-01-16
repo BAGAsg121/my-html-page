@@ -58,6 +58,35 @@
 
     <!-- Script to handle signup and set visitor details -->
     <script>
+        // Function to create a ticket in Zoho Desk
+        function createZohoDeskTicket(userId, name, phone, email) {
+            var requestBody = {
+                departmentId: "YOUR_DEPARTMENT_ID", // Replace with your Zoho Desk department ID
+                subject: "New Signup: " + name,
+                description: "User ID: " + userId + "\nPhone: " + phone + "\nEmail: " + email,
+                email: email,
+                phone: phone,
+                status: "Open",
+                priority: "High"
+            };
+
+            fetch("https://desk.zoho.com/api/v1/tickets", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Zoho-oauthtoken YOUR_ACCESS_TOKEN" // Replace with your Zoho OAuth token
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Ticket created successfully:", data);
+            })
+            .catch(error => {
+                console.error("Error creating ticket:", error);
+            });
+        }
+
         // Wait until Zoho SalesIQ is ready
         $zoho.salesiq.ready = function() {
             console.log("SalesIQ is ready");
@@ -93,6 +122,9 @@
 
                     $zoho.salesiq.visitor.email(email); // Set visitor's email
                     console.log("Visitor Email set in SalesIQ: " + email);
+
+                    // Create a ticket in Zoho Desk
+                    createZohoDeskTicket(userId, name, phone, email);
                 }, 2000); // Delay by 2 seconds
 
                 // Display confirmation and keep the page static
