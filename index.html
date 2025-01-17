@@ -5,26 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
     <style>
+        /* Add a Google font for stylish text */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500;700&display=swap');
+
         body {
-            background-color: lightblue;
-            font-family: Arial, sans-serif;
+            background-image: url('path-to-your-guts-image.jpg'); /* Replace with the actual image path or URL */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Roboto Slab', serif;
+            color: white;
             text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
             margin-top: 50px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
         }
+
+        p {
+            font-size: 1.2em;
+            font-weight: 300;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
         form {
-            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent form background */
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: left;
         }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
         input[type="text"], input[type="tel"], input[type="email"] {
             padding: 10px;
-            margin: 10px;
-            width: 200px;
+            margin-bottom: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            font-size: 1em;
         }
+
         input[type="submit"] {
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #FF4500;
             color: white;
             border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #FF6347;
         }
     </style>
 </head>
@@ -32,19 +78,18 @@
     <h1>Signup</h1>
     <p>Please enter your contact_id, name, phone number, and email to sign up.</p>
 
-    <!-- Signup Form to collect user ID, name, phone number, and email -->
     <form id="signupForm">
-        <label for="contact_id">contact_id:</label><br>
-        <input type="text" id="contact_id" name="contact_id"><br>
+        <label for="contact_id">Contact ID:</label>
+        <input type="text" id="contact_id" name="contact_id" required>
 
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-        <label for="phone">Phone Number:</label><br>
-        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010"><br>
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
         <input type="submit" value="Sign Up">
     </form>
@@ -58,57 +103,48 @@
 
     <!-- Script to handle signup and set visitor details -->
     <script>
-        // Wait until Zoho SalesIQ is ready
         $zoho.salesiq.ready = function() {
             console.log("SalesIQ is ready");
 
-            // Handle signup form submission
             document.getElementById("signupForm").onsubmit = function(event) {
-                event.preventDefault(); // Prevent page refresh
+                event.preventDefault();
 
-                // Get user ID, name, phone number, and email from the form
                 var contact_id = document.getElementById("contact_id").value;
                 var name = document.getElementById("name").value;
                 var phone = document.getElementById("phone").value;
                 var email = document.getElementById("email").value;
 
-                console.log("contact_id: " + contact_id);
-                console.log("Name: " + name);
-                console.log("Phone: " + phone);
-                console.log("Email: " + email);
+                $zoho.salesiq.visitor.uniqueuserid(contact_id);
+                $zoho.salesiq.visitor.customfield("Desk Contact ID", contact_id);
+                $zoho.salesiq.visitor.name(name);
+                $zoho.salesiq.visitor.contactnumber(phone);
+                $zoho.salesiq.visitor.email(email);
 
-                // Fetch contact details from Zoho Desk API
-                const oauthToken = "<your_oauth_token>"; // Replace with your actual OAuth token
-                fetch(`https://desk.zoho.com/api/v1/contacts/${contact_id}`, {
-                    method: "GET",
+                const oauthToken = "<your_oauth_token>";
+                fetch('https://desk.zoho.com/api/v1/tickets', {
+                    method: 'POST',
                     headers: {
-                        "Authorization": `Zoho-oauthtoken ${oauthToken}`
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data) {
-                            console.log("Contact Data:", data);
-
-                            // Set visitor's details in SalesIQ
-                            $zoho.salesiq.visitor.uniqueuserid(contact_id); // Set visitor's unique User ID
-                            $zoho.salesiq.visitor.customfield("Desk Contact ID", contact_id); // Set visitor's User ID
-                            $zoho.salesiq.visitor.name(name); // Set visitor's name
-                            $zoho.salesiq.visitor.contactnumber(phone); // Set visitor's phone number
-                            $zoho.salesiq.visitor.email(email); // Set visitor's email
-
-                            // Display success message
-                            document.getElementById("signupForm").style.display = "none"; // Hide the form
-                            document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your User ID (${contact_id}), phone number (${phone}), and email (${email}) have been recorded.</p>`;
-                        } else {
-                            console.error("No contact data found for the provided User ID.");
-                            alert("Error: Contact not found in Zoho Desk.");
-                        }
+                        'Authorization': `Zoho-oauthtoken ${oauthToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        subject: "New Signup",
+                        departmentId: "<your_department_id>",
+                        contactId: contact_id,
+                        description: `New signup from ${name} with phone number ${phone} and email ${email}.`,
+                        priority: "High",
+                        status: "Open"
                     })
-                    .catch(error => {
-                        console.error("Error fetching contact:", error);
-                        alert("An error occurred while fetching contact details.");
-                    });
+                })
+                .then(response => response.json())
+                .then(ticketData => {
+                    document.getElementById("signupForm").style.display = "none";
+                    document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your details have been recorded and a ticket has been created.</p>`;
+                })
+                .catch(error => {
+                    console.error("Error creating ticket:", error);
+                    alert("An error occurred while creating a ticket.");
+                });
             };
         };
     </script>
