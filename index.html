@@ -77,17 +77,17 @@
     <p>Please enter your contact_id, name, phone number, and email to sign up.</p>
 
     <form id="signupForm">
-        <label for="contact_id">Contact ID (Numerical):</label>
-        <input type="text" id="contact_id" name="contact_id" placeholder="Enter a numerical Contact ID">
+        <label for="contact_id">Contact ID:</label>
+        <input type="text" id="contact_id" name="contact_id">
 
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name">
+        <input type="text" id="name" name="name">
 
         <label for="phone">Phone Number:</label>
         <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010">
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email address">
+        <input type="email" id="email" name="email">
 
         <input type="submit" value="Sign Up">
     </form>
@@ -107,15 +107,14 @@
             document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault();
 
-                console.log("Form submission started...");
                 var contact_id = document.getElementById("contact_id").value.trim();
                 var name = document.getElementById("name").value.trim();
                 var phone = document.getElementById("phone").value.trim();
                 var email = document.getElementById("email").value.trim();
 
-                // Validate contact_id (optional)
+                // Validate contact_id
                 if (contact_id === "") {
-                    contact_id = null; // Allow empty contact_id
+                    contact_id = null;
                 } else {
                     contact_id = parseInt(contact_id, 10);
                     if (isNaN(contact_id)) {
@@ -124,12 +123,18 @@
                     }
                 }
 
-                console.log("Contact ID:", contact_id);
-                console.log("Name:", name);
-                console.log("Phone:", phone);
-                console.log("Email:", email);
+                // Set visitor information in Zoho SalesIQ
+                $zoho.salesiq.visitor.uniqueuserid(contact_id);
+                $zoho.salesiq.visitor.name(name);
+                $zoho.salesiq.visitor.contactnumber(phone);
+                $zoho.salesiq.visitor.email(email);
 
-                // Call Zoho API (remove or comment if debugging locally)
+                // Add custom field using addinfo
+                $zoho.salesiq.visitor.addinfo({
+                    "Desk Contact ID": contact_id
+                });
+
+                // Call Zoho Desk API
                 const oauthToken = "x";
                 fetch('https://desk.zoho.in/api/v1/tickets', {
                     method: 'POST',
@@ -148,7 +153,6 @@
                 })
                 .then(response => response.json())
                 .then(ticketData => {
-                    console.log("Ticket created:", ticketData);
                     document.getElementById("signupForm").style.display = "none";
                     document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your details have been recorded and a ticket has been created.</p>`;
                 })
