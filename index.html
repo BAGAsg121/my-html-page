@@ -46,7 +46,7 @@
             margin: 10px 0 5px;
         }
 
-        input[type="text"], input[type="tel"], input[type="email"] {
+        input[type="text"], input[type="tel"], input[type="email"], input[type="number"] {
             padding: 10px;
             margin-bottom: 15px;
             width: 100%;
@@ -78,7 +78,7 @@
 
     <form id="signupForm">
         <label for="contact_id">Contact ID:</label>
-        <input type="text" id="contact_id" name="contact_id">
+        <input type="number" id="contact_id" name="contact_id">
 
         <label for="name">Name:</label>
         <input type="text" id="name" name="name">
@@ -107,10 +107,16 @@
             document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault();
 
-                var contact_id = document.getElementById("contact_id").value;
+                // Convert contact_id to a number
+                var contact_id = parseInt(document.getElementById("contact_id").value) || null;
                 var name = document.getElementById("name").value;
                 var phone = document.getElementById("phone").value;
                 var email = document.getElementById("email").value;
+
+                if (!contact_id) {
+                    alert("Please enter a valid numerical Contact ID.");
+                    return;
+                }
 
                 $zoho.salesiq.visitor.uniqueuserid(contact_id);
                 $zoho.salesiq.visitor.customfield("Desk Contact ID", contact_id);
