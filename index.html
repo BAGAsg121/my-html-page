@@ -46,7 +46,7 @@
             margin: 10px 0 5px;
         }
 
-        input[type="text"], input[type="tel"], input[type="email"], input[type="number"] {
+        input[type="text"], input[type="tel"], input[type="email"] {
             padding: 10px;
             margin-bottom: 15px;
             width: 100%;
@@ -77,17 +77,17 @@
     <p>Please enter your contact_id, name, phone number, and email to sign up.</p>
 
     <form id="signupForm">
-        <label for="contact_id">Contact ID:</label>
-        <input type="number" id="contact_id" name="contact_id" required>
+        <label for="contact_id">Contact ID (Numerical):</label>
+        <input type="text" id="contact_id" name="contact_id" placeholder="Enter a numerical Contact ID">
 
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" placeholder="Enter your name">
 
         <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required>
+        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010">
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" placeholder="Enter your email address">
 
         <input type="submit" value="Sign Up">
     </form>
@@ -107,24 +107,30 @@
             document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault();
 
-                // Convert contact_id to a number
-                var contact_id = parseInt(document.getElementById("contact_id").value) || null;
-                var name = document.getElementById("name").value;
-                var phone = document.getElementById("phone").value;
-                var email = document.getElementById("email").value;
+                console.log("Form submission started...");
+                var contact_id = document.getElementById("contact_id").value.trim();
+                var name = document.getElementById("name").value.trim();
+                var phone = document.getElementById("phone").value.trim();
+                var email = document.getElementById("email").value.trim();
 
-                if (!contact_id) {
-                    alert("Please enter a valid numerical Contact ID.");
-                    return;
+                // Validate contact_id (optional)
+                if (contact_id === "") {
+                    contact_id = null; // Allow empty contact_id
+                } else {
+                    contact_id = parseInt(contact_id, 10);
+                    if (isNaN(contact_id)) {
+                        alert("Please enter a valid numerical Contact ID.");
+                        return;
+                    }
                 }
 
-                $zoho.salesiq.visitor.uniqueuserid(contact_id);
-                $zoho.salesiq.visitor.customfield("Desk Contact ID", contact_id);
-                $zoho.salesiq.visitor.name(name);
-                $zoho.salesiq.visitor.contactnumber(phone);
-                $zoho.salesiq.visitor.email(email);
+                console.log("Contact ID:", contact_id);
+                console.log("Name:", name);
+                console.log("Phone:", phone);
+                console.log("Email:", email);
 
-                const oauthToken = "<your_oauth_token>"; // Replace with your actual OAuth token
+                // Call Zoho API (remove or comment if debugging locally)
+                const oauthToken = "x";
                 fetch('https://desk.zoho.in/api/v1/tickets', {
                     method: 'POST',
                     headers: {
@@ -133,21 +139,16 @@
                     },
                     body: JSON.stringify({
                         subject: "New Signup",
-                        departmentId: "<your_department_id>", // Replace with your actual department ID
+                        departmentId: "x",
                         contactId: contact_id,
                         description: `New signup from ${name} with phone number ${phone} and email ${email}.`,
                         priority: "High",
                         status: "Open"
                     })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(ticketData => {
-                    console.log("Ticket Created:", ticketData);
+                    console.log("Ticket created:", ticketData);
                     document.getElementById("signupForm").style.display = "none";
                     document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your details have been recorded and a ticket has been created.</p>`;
                 })
