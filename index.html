@@ -129,9 +129,9 @@
                 $zoho.salesiq.visitor.contactnumber(phone);
                 $zoho.salesiq.visitor.email(email);
 
-                // Add custom field using addinfo
-                $zoho.salesiq.visitor.addinfo({
-                    "Desk Contact ID": contact_id
+                // Set custom visitor details
+                $zoho.salesiq.visitor.info({
+                    "Desk Contact ID": contact_id.toString() || "Not Provided"
                 });
 
                 // Call Zoho Desk API
