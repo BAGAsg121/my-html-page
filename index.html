@@ -30,12 +30,12 @@
 </head>
 <body>
     <h1>Signup</h1>
-    <p>Please enter your User ID, name, phone number, and email to sign up.</p>
+    <p>Please enter your contact_id, name, phone number, and email to sign up.</p>
 
     <!-- Signup Form to collect user ID, name, phone number, and email -->
     <form id="signupForm">
-        <label for="userid">User ID:</label><br>
-        <input type="text" id="userid" name="userid"><br>
+        <label for="contact_id">contact_id:</label><br>
+        <input type="text" id="contact_id" name="contact_id"><br>
 
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
@@ -51,8 +51,8 @@
 
     <!-- Updated Zoho SalesIQ Zobot Embed Code -->
     <script>
-        window.$zoho=window.$zoho || {};
-        $zoho.salesiq=$zoho.salesiq||{ready:function(){}}; 
+        window.$zoho = window.$zoho || {};
+        $zoho.salesiq = $zoho.salesiq || { ready: function() {} };
     </script>
     <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siq546da70b85967ba4160f65aa2f7fcd1f0054bc67f0538fb0412db2a90a25472eeab3f2c6f521033994aeacca51162815" defer></script>
 
@@ -67,38 +67,49 @@
                 event.preventDefault(); // Prevent page refresh
 
                 // Get user ID, name, phone number, and email from the form
-                var userId = document.getElementById("userid").value;
+                var contact_id = document.getElementById("contact_id").value;
                 var name = document.getElementById("name").value;
                 var phone = document.getElementById("phone").value;
                 var email = document.getElementById("email").value;
 
-                console.log("User ID: " + userId);
+                console.log("contact_id: " + contact_id);
                 console.log("Name: " + name);
                 console.log("Phone: " + phone);
                 console.log("Email: " + email);
 
-                // Set visitor's details in SalesIQ
-                setTimeout(function() {
-                    $zoho.salesiq.visitor.uniqueuserid(userId); // Set visitor's unique User ID
-                    console.log("Visitor Unique User ID set in SalesIQ: " + userId);
+                // Fetch contact details from Zoho Desk API
+                const oauthToken = "<your_oauth_token>"; // Replace with your actual OAuth token
+                fetch(`https://desk.zoho.com/api/v1/contacts/${contact_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Zoho-oauthtoken ${oauthToken}`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data) {
+                            console.log("Contact Data:", data);
 
-                    $zoho.salesiq.visitor.customfield("UserID", userId); // Set visitor's User ID
-                    console.log("Visitor User ID set in SalesIQ: " + userId);
+                            // Set visitor's details in SalesIQ
+                            $zoho.salesiq.visitor.uniqueuserid(contact_id); // Set visitor's unique User ID
+                            $zoho.salesiq.visitor.customfield("Desk Contact ID", contact_id); // Set visitor's User ID
+                            $zoho.salesiq.visitor.name(name); // Set visitor's name
+                            $zoho.salesiq.visitor.contactnumber(phone); // Set visitor's phone number
+                            $zoho.salesiq.visitor.email(email); // Set visitor's email
 
-                    $zoho.salesiq.visitor.name(name); // Set visitor's name
-                    console.log("Visitor Name set in SalesIQ: " + name);
-
-                    $zoho.salesiq.visitor.contactnumber(phone); // Set visitor's phone number
-                    console.log("Visitor Phone set in SalesIQ: " + phone);
-
-                    $zoho.salesiq.visitor.email(email); // Set visitor's email
-                    console.log("Visitor Email set in SalesIQ: " + email);
-                }, 2000); // Delay by 2 seconds
-
-                // Display confirmation and keep the page static
-                document.getElementById("signupForm").style.display = "none"; // Hide the form
-                document.body.innerHTML += "<p>Thank you for signing up, " + name + "! Your User ID (" + userId + "), phone number (" + phone + "), and email (" + email + ") have been recorded.</p>";
-            }
+                            // Display success message
+                            document.getElementById("signupForm").style.display = "none"; // Hide the form
+                            document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your User ID (${contact_id}), phone number (${phone}), and email (${email}) have been recorded.</p>`;
+                        } else {
+                            console.error("No contact data found for the provided User ID.");
+                            alert("Error: Contact not found in Zoho Desk.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching contact:", error);
+                        alert("An error occurred while fetching contact details.");
+                    });
+            };
         };
     </script>
 </body>
