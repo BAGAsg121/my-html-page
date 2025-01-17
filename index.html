@@ -140,8 +140,14 @@
                         status: "Open"
                     })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(ticketData => {
+                    console.log("Ticket Created:", ticketData);
                     document.getElementById("signupForm").style.display = "none";
                     document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your details have been recorded and a ticket has been created.</p>`;
                 })
