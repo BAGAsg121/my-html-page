@@ -78,16 +78,16 @@
 
     <form id="signupForm">
         <label for="contact_id">Contact ID:</label>
-        <input type="number" id="contact_id" name="contact_id">
+        <input type="number" id="contact_id" name="contact_id" required>
 
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
+        <input type="text" id="name" name="name" required>
 
         <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010">
+        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010" required>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email">
+        <input type="email" id="email" name="email" required>
 
         <input type="submit" value="Sign Up">
     </form>
@@ -124,7 +124,7 @@
                 $zoho.salesiq.visitor.contactnumber(phone);
                 $zoho.salesiq.visitor.email(email);
 
-                const oauthToken = "x";
+                const oauthToken = "<your_oauth_token>"; // Replace with your actual OAuth token
                 fetch('https://desk.zoho.in/api/v1/tickets', {
                     method: 'POST',
                     headers: {
@@ -133,7 +133,7 @@
                     },
                     body: JSON.stringify({
                         subject: "New Signup",
-                        departmentId: "x",
+                        departmentId: "<your_department_id>", // Replace with your actual department ID
                         contactId: contact_id,
                         description: `New signup from ${name} with phone number ${phone} and email ${email}.`,
                         priority: "High",
