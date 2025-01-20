@@ -135,7 +135,7 @@
                 });
 
                 // Call Zoho Desk API
-                const oauthToken = "1000.9689b717b50a5d2eca24d0d091a5dbe2.6e122c323bfb21c181e230752ee28d6d";
+                const oauthToken = "x";
                 fetch('https://desk.zoho.in/api/v1/tickets', {
                     method: 'POST',
                     headers: {
@@ -144,7 +144,7 @@
                     },
                     body: JSON.stringify({
                         subject: "New Signup",
-                        departmentId: "40373000000010772",
+                        departmentId: "x",
                         contactId: contact_id,
                         description: `New signup from ${name} with phone number ${phone} and email ${email}.`,
                         priority: "High",
