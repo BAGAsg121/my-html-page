@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
     <style>
-        /* Add a Google font for stylish text */
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500;700&display=swap');
 
         body {
-            background-color: #2c2c2c; /* Lightish black background */
+            background-color: #2c2c2c;
             color: white;
             font-family: 'Roboto Slab', serif;
             text-align: center;
@@ -32,7 +31,7 @@
         }
 
         form {
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent form background */
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
             display: inline-block;
@@ -46,7 +45,7 @@
             margin: 10px 0 5px;
         }
 
-        input[type="text"], input[type="tel"], input[type="email"] {
+        input[type="text"] {
             padding: 10px;
             margin-bottom: 15px;
             width: 100%;
@@ -74,91 +73,37 @@
 </head>
 <body>
     <h1>Signup</h1>
-    <p>Please enter your contact_id, name, phone number, and email to sign up.</p>
+    <p>Please enter your Contact ID to retrieve your information.</p>
 
     <form id="signupForm">
         <label for="contact_id">Contact ID:</label>
         <input type="text" id="contact_id" name="contact_id">
-
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
-
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" placeholder="1-541-754-3010">
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email">
-
-        <input type="submit" value="Sign Up">
+        <input type="submit" value="Get Info">
     </form>
 
-    <!-- Updated Zoho SalesIQ Zobot Embed Code -->
+    <p id="infoDisplay"></p>
+
     <script>
         window.$zoho = window.$zoho || {};
         $zoho.salesiq = $zoho.salesiq || { ready: function() {} };
     </script>
     <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siq546da70b85967ba4160f65aa2f7fcd1f0054bc67f0538fb0412db2a90a25472eeab3f2c6f521033994aeacca51162815" defer></script>
 
-    <!-- Script to handle signup and set visitor details -->
     <script>
         $zoho.salesiq.ready = function() {
             console.log("SalesIQ is ready");
 
             document.getElementById("signupForm").onsubmit = function(event) {
                 event.preventDefault();
-
                 var contact_id = document.getElementById("contact_id").value.trim();
-                var name = document.getElementById("name").value.trim();
-                var phone = document.getElementById("phone").value.trim();
-                var email = document.getElementById("email").value.trim();
-
-                // Validate contact_id
+                
                 if (contact_id === "") {
-                    contact_id = null;
-                } else {
-                    contact_id = parseInt(contact_id, 10);
-                    if (isNaN(contact_id)) {
-                        alert("Please enter a valid numerical Contact ID.");
-                        return;
-                    }
+                    alert("Please enter a Contact ID.");
+                    return;
                 }
-
-                // Set visitor information in Zoho SalesIQ
-                $zoho.salesiq.visitor.uniqueuserid(contact_id);
-                $zoho.salesiq.visitor.name(name);
-                $zoho.salesiq.visitor.contactnumber(phone);
-                $zoho.salesiq.visitor.email(email);
-
-                // Set custom visitor details
-                $zoho.salesiq.visitor.info({
-                    "Desk Contact ID": contact_id.toString() || "Not Provided"
-                });
-
-                // Call Zoho Desk API
-                const oauthToken = "x";
-                fetch('https://desk.zoho.in/api/v1/tickets', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Zoho-oauthtoken ${oauthToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        subject: "New Signup",
-                        departmentId: "x",
-                        contactId: contact_id,
-                        description: `New signup from ${name} with phone number ${phone} and email ${email}.`,
-                        priority: "High",
-                        status: "Open"
-                    })
-                })
-                .then(response => response.json())
-                .then(ticketData => {
-                    document.getElementById("signupForm").style.display = "none";
-                    document.body.innerHTML += `<p>Thank you for signing up, ${name}! Your details have been recorded and a ticket has been created.</p>`;
-                })
-                .catch(error => {
-                    console.error("Error creating ticket:", error);
-                    alert("An error occurred while creating a ticket.");
+                
+                $zoho.salesiq.visitor.get("<custom_field_api_name>", function(response) {
+                    document.getElementById("infoDisplay").innerText = response ? `Retrieved Info: ${response}` : "No information found.";
                 });
             };
         };
