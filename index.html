@@ -102,6 +102,10 @@
                     return;
                 }
                 
+                // Set visitor info in Zoho SalesIQ
+                $zoho.salesiq.visitor.info({ "Desk Contact ID": contact_id });
+
+                // Retrieve visitor info to display
                 $zoho.salesiq.visitor.info(function(response) {
                     console.log(response);
                     let customFieldValue = response["<custom_field_api_name>"] || "No information found.";
