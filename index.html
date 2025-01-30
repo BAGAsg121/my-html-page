@@ -102,8 +102,10 @@
                     return;
                 }
                 
-                $zoho.salesiq.visitor.get("<custom_field_api_name>", function(response) {
-                    document.getElementById("infoDisplay").innerText = response ? `Retrieved Info: ${response}` : "No information found.";
+                $zoho.salesiq.visitor.info(function(response) {
+                    console.log(response);
+                    let customFieldValue = response["<custom_field_api_name>"] || "No information found.";
+                    document.getElementById("infoDisplay").innerText = `Retrieved Info: ${customFieldValue}`;
                 });
             };
         };
