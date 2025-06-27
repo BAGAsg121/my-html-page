@@ -1,118 +1,755 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup Page</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500;700&display=swap');
-
-        body {
-            background-color: #2c2c2c;
-            color: white;
-            font-family: 'Roboto Slab', serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            font-size: 3em;
-            font-weight: 700;
-            margin-top: 50px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-        }
-
-        p {
-            font-size: 1.2em;
-            font-weight: 300;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        form {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            text-align: left;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-        }
-
-        label {
-            font-weight: 500;
-            display: block;
-            margin: 10px 0 5px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            margin-bottom: 15px;
-            width: 100%;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            font-size: 1em;
-        }
-
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #FF4500;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #FF6347;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Subscription Portal - Network Setup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --primary-light: #fef3c7;
+      --primary-dark: #d97706;
+      --secondary: #fbbf24;
+      --light: #ffffff;
+      --dark: #1e293b;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --gradient: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+      --form-bg: #ffffff;
+      --form-border: #e2e8f0;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: var(--gray-50);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-image: 
+        radial-gradient(circle at 0% 0%, var(--primary-light) 0%, transparent 20%),
+        radial-gradient(circle at 100% 100%, var(--primary-light) 0%, transparent 20%);
+      background-attachment: fixed;
+    }
+    
+    #portal-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.5;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .form-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    
+    .form-header h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+    
+    .form-header p {
+      color: var(--gray-500);
+      font-size: 1.05rem;
+      max-width: 90%;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 640px) {
+      .form-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .form-header p {
+        font-size: 1rem;
+      }
+    }
+    
+    .form-container {
+      background: var(--form-bg);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 520px;
+      margin: 4rem auto;
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-xl);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    @media (max-width: 640px) {
+      .form-container {
+        margin: 2rem 1rem;
+        padding: 2rem 1.5rem;
+        border-radius: var(--radius-md);
+      }
+    }
+    
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      transition: var(--transition);
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--gray-300);
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      font-size: 0.9375rem;
+      color: var(--gray-800);
+      transition: var(--transition);
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    input[type="tel"]:hover,
+    input[type="number"]:hover,
+    select:hover,
+    textarea:hover {
+      border-color: var(--gray-400);
+    }
+    
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--gray-400);
+      opacity: 1;
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1em;
+      padding-right: 2.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .form-group:not(:last-child) {
+      margin-bottom: 1.75rem;
+    }
+    
+    button[type="submit"] {
+      background: var(--gray-900);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      margin-top: 0.5rem;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      box-shadow: var(--shadow-md);
+    }
+    
+    button[type="submit"]:hover {
+      background: var(--gray-800);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    button[type="submit"]:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-md);
+    }
+    
+    button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      opacity: 0;
+      z-index: -1;
+      transition: var(--transition);
+    }
+    
+    button[type="submit"]:hover::before {
+      opacity: 1;
+    }
+    
+    button[type="submit"] svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: var(--transition);
+    }
+    
+    button[type="submit"]:hover svg {
+      transform: translateX(2px);
+    }
+    
+    .info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      display: block;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    /* 3D Effects */
+    .form-container, .plan-section {
+      will-change: transform, box-shadow;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .form-container {
+        padding: 1.5rem;
+      }
+      
+      .plan-section {
+        padding: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Signup</h1>
-    <p>Please enter your Contact ID to retrieve your information.</p>
+  <canvas id="portal-bg"></canvas>
 
-    <form id="signupForm">
-        <label for="contact_id">Contact ID:</label>
-        <input type="text" id="contact_id" name="contact_id">
-        <input type="submit" value="Get Info">
+  <div class="container">
+    <header>
+      <h1>Network Portal</h1>
+      <p class="subtitle">Setup your organization and subscription plans with our interactive portal</p>
+    </header>
+    
+    <form id="subscriptionForm" class="form-container">
+      <div class="form-header">
+        <h1>Organization & Subscription</h1>
+        <p>Complete the form below to set up your organization and subscription plans</p>
+      </div>
+    <div class="form-group">
+      <label for="orgName">Organization Name</label>
+      <input type="text" id="orgName" name="orgName" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="adminName">Admin Name</label>
+      <input type="text" id="adminName" name="adminName" required>
+    </div>
+
+    <div class="form-group">
+      <label for="adminEmail">Admin Email</label>
+      <input type="email" id="adminEmail" name="adminEmail" required>
+    </div>
+
+    <div class="form-group">
+      <label for="adminPhone">Admin Phone Number</label>
+      <input type="tel" id="adminPhone" name="adminPhone" required>
+    </div>
+
+    <div class="form-group">
+      <label for="planCount">How many Subscription Plans (Max 4)</label>
+      <select id="planCount" name="planCount" onchange="showPlans()" required>
+        <option value="">Select</option>
+        <option value="1">1 Plan</option>
+        <option value="2">2 Plans</option>
+        <option value="3">3 Plans</option>
+        <option value="4">4 Plans</option>
+      </select>
+    </div>
+
+    <!-- Plan sections -->
+    <div id="plansContainer"></div>
+
+      <div class="form-footer">
+        <button type="submit">
+          <span>Launch Network</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </form>
+  </div>
 
-    <p id="infoDisplay"></p>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script>
+    const maxPlans = 4;
 
-    <script>
-        window.$zoho = window.$zoho || {};
-        $zoho.salesiq = $zoho.salesiq || { ready: function() {} };
-    </script>
-    <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siq546da70b85967ba4160f65aa2f7fcd1f0054bc67f0538fb0412db2a90a25472eeab3f2c6f521033994aeacca51162815" defer></script>
+    function showPlans() {
+      const planCount = parseInt(document.getElementById("planCount").value);
+      const container = document.getElementById("plansContainer");
+      container.innerHTML = ""; // clear old plans
 
-    <script>
-        $zoho.salesiq.ready = function() {
-            console.log("SalesIQ is ready");
+      for (let i = 1; i <= planCount; i++) {
+        const planDiv = document.createElement("div");
+        planDiv.className = "plan-section";
+        planDiv.innerHTML = `
+          <h3>Subscription Plan ${i}</h3>
+          <div class="form-group">
+            <label for="planName${i}">Plan ${i} Name</label>
+            <input type="text" id="planName${i}" name="planName${i}" required>
+          </div>
+          <div class="form-group">
+            <label for="planDesc${i}">Plan ${i} Description</label>
+            <textarea id="planDesc${i}" name="planDesc${i}" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="price${i}">Price</label>
+            <input type="number" id="price${i}" name="price${i}" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="billEvery${i}">Bill Every</label>
+            <select id="billEvery${i}" name="billEvery${i}" required>
+              <option value="">Select</option>
+              <option value="Week">Week</option>
+              <option value="Month">Month</option>
+              <option value="Year">Year</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="billingCycle${i}">Billing Cycle</label>
+            <select id="billingCycle${i}" name="billingCycle${i}" onchange="toggleCycleField(${i})" required>
+              <option value="">Select</option>
+              <option value="auto">Auto-renews until canceled</option>
+              <option value="expires">Expires after a specified number of billing cycles</option>
+            </select>
+          </div>
+          <div class="form-group hidden" id="cycleCountGroup${i}">
+            <label for="cycleCount${i}">
+              Number of times the customer will be billed for a subscription of this plan.
+              <span class="info">(If the plan expires after a specific number of cycles)</span>
+            </label>
+            <input type="number" id="cycleCount${i}" name="cycleCount${i}" min="1">
+          </div>
+          <div class="form-group">
+            <label for="features${i}">Plan ${i} Features (comma-separated)</label>
+            <input type="text" id="features${i}" name="features${i}" placeholder="e.g., Feature A, Feature B">
+          </div>
+        `;
+        container.appendChild(planDiv);
+      }
+    }
 
-            document.getElementById("signupForm").onsubmit = function(event) {
-                event.preventDefault();
-                var contact_id = document.getElementById("contact_id").value.trim();
-                
-                if (contact_id === "") {
-                    alert("Please enter a Contact ID.");
-                    return;
-                }
-                
-                // Set visitor info in Zoho SalesIQ
-                $zoho.salesiq.visitor.info({ "Desk Contact ID": contact_id });
-
-                // Retrieve visitor info to display
-                $zoho.salesiq.visitor.info(function(response) {
-                    console.log(response);
-                    let customFieldValue = response["<custom_field_api_name>"] || "No information found.";
-                    document.getElementById("infoDisplay").innerText = `Retrieved Info: ${customFieldValue}`;
-                });
-            };
-        };
-    </script>
+    function toggleCycleField(i) {
+      const billingType = document.getElementById(`billingCycle${i}`).value;
+      const cycleGroup = document.getElementById(`cycleCountGroup${i}`);
+      cycleGroup.classList.toggle("hidden", billingType !== "expires");
+    }
+  </script>
+  
+  <script>
+    // 3D Portal Background
+    document.addEventListener('DOMContentLoaded', () => {
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('portal-bg'),
+        alpha: true,
+        antialias: true
+      });
+      
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      
+      // Camera position
+      camera.position.z = 30;
+      
+      // Create particles
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particleCount = 3000;
+      
+      const posArray = new Float32Array(particleCount * 3);
+      
+      for (let i = 0; i < particleCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 2000;
+      }
+      
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      
+      // Particle material
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.5,
+        color: '#4f46e5',
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+      });
+      
+      // Create particle system
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+      
+      // Add floating shapes
+      const shapes = [];
+      const geometries = [
+        new THREE.IcosahedronGeometry(1, 0),
+        new THREE.OctahedronGeometry(1, 0),
+        new THREE.TetrahedronGeometry(1, 0)
+      ];
+      
+      const colors = [0x4f46e5, 0x00d1b2, 0x7c3aed, 0xf59e0b];
+      
+      // Create multiple floating shapes
+      for (let i = 0; i < 8; i++) {
+        const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+        const material = new THREE.MeshPhongMaterial({
+          color: colors[Math.floor(Math.random() * colors.length)],
+          wireframe: true,
+          transparent: true,
+          opacity: 0.6,
+          shininess: 100,
+          emissive: 0x4f46e5,
+          emissiveIntensity: 0.2
+        });
+        
+        const shape = new THREE.Mesh(geometry, material);
+        
+        // Random position in a sphere
+        const radius = 50 + Math.random() * 100;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        
+        shape.position.set(
+          radius * Math.sin(phi) * Math.cos(theta),
+          radius * Math.sin(phi) * Math.sin(theta),
+          radius * Math.cos(phi)
+        );
+        
+        shape.scale.setScalar(5 + Math.random() * 10);
+        shape.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          0
+        );
+        
+        shapes.push({
+          mesh: shape,
+          speed: 0.02 + Math.random() * 0.03,
+          rotation: {
+            x: (Math.random() - 0.5) * 0.005,
+            y: (Math.random() - 0.5) * 0.005,
+            z: (Math.random() - 0.5) * 0.005
+          },
+          radius: radius,
+          theta: theta,
+          phi: phi,
+          orbitSpeed: (Math.random() - 0.5) * 0.001
+        });
+        
+        scene.add(shape);
+      }
+      
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+      scene.add(ambientLight);
+      
+      // Add directional light
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(1, 1, 1);
+      scene.add(directionalLight);
+      
+      // Add point light
+      const pointLight = new THREE.PointLight(0x4f46e5, 1, 100);
+      pointLight.position.set(10, 10, 10);
+      scene.add(pointLight);
+      
+      // Animation loop
+      const clock = new THREE.Clock();
+      
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        const elapsedTime = clock.getElapsedTime();
+        
+        // Update particles
+        const positions = particlesGeometry.attributes.position.array;
+        for (let i = 0; i < positions.length; i += 3) {
+          // Make particles move in a wave-like pattern
+          positions[i + 1] += Math.sin(elapsedTime * 0.5 + positions[i] * 0.01) * 0.05;
+          positions[i] += Math.cos(elapsedTime * 0.3 + positions[i + 1] * 0.01) * 0.05;
+          positions[i + 2] += Math.sin(elapsedTime * 0.2 + positions[i + 2] * 0.01) * 0.05;
+        }
+        particlesGeometry.attributes.position.needsUpdate = true;
+        
+        // Update shapes
+        shapes.forEach((shape) => {
+          // Rotate shapes
+          shape.mesh.rotation.x += shape.rotation.x;
+          shape.mesh.rotation.y += shape.rotation.y;
+          shape.mesh.rotation.z += shape.rotation.z;
+          
+          // Orbit around center
+          shape.theta += shape.orbitSpeed;
+          
+          // Update position in orbit
+          shape.mesh.position.x = shape.radius * Math.sin(shape.phi) * Math.cos(shape.theta + elapsedTime * shape.speed);
+          shape.mesh.position.y = shape.radius * Math.sin(shape.phi) * Math.sin(shape.theta + elapsedTime * shape.speed);
+          shape.mesh.position.z = shape.radius * Math.cos(shape.phi) * Math.sin(elapsedTime * shape.speed * 0.5);
+          
+          // Pulsing effect
+          const scale = 1 + Math.sin(elapsedTime * shape.speed * 2) * 0.1;
+          shape.mesh.scale.set(scale, scale, scale);
+        });
+        
+        // Update point light position
+        pointLight.position.x = Math.sin(elapsedTime * 0.3) * 30;
+        pointLight.position.y = Math.cos(elapsedTime * 0.2) * 30;
+        pointLight.position.z = Math.sin(elapsedTime * 0.4) * 30;
+        
+        // Rotate camera around the scene
+        camera.position.x = Math.sin(elapsedTime * 0.1) * 50;
+        camera.position.z = Math.cos(elapsedTime * 0.1) * 50;
+        camera.lookAt(scene.position);
+        
+        renderer.render(scene, camera);
+      }
+      
+      // Handle window resize
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      
+      window.addEventListener('resize', onWindowResize, false);
+      
+      // Start animation
+      animate();
+      
+      // Simple form interactions
+      const form = document.querySelector('.form-container');
+      const formGroups = document.querySelectorAll('.form-group');
+      const submitBtn = document.querySelector('button[type="submit"]');
+      
+      // Add subtle hover effect on form
+      form.addEventListener('mouseenter', () => {
+        gsap.to(form, {
+          y: -5,
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+      
+      form.addEventListener('mouseleave', () => {
+        gsap.to(form, {
+          y: 0,
+          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+      
+      // Simple input focus effect
+      formGroups.forEach((group, index) => {
+        const input = group.querySelector('input, select, textarea');
+        if (!input) return;
+        
+        input.addEventListener('focus', () => {
+          group.style.borderColor = 'var(--primary)';
+          group.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.2)';
+        });
+        
+        input.addEventListener('blur', () => {
+          group.style.borderColor = '#e2e8f0';
+          group.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+        });
+        
+        // Simple animation on load
+        gsap.from(group, {
+          y: 20,
+          opacity: 0,
+          duration: 0.5,
+          delay: 0.1 * index,
+          ease: 'power2.out'
+        });
+      });
+      
+      // Simple button hover effect
+      if (submitBtn) {
+        submitBtn.addEventListener('mouseenter', () => {
+          gsap.to(submitBtn, {
+            y: -2,
+            boxShadow: '0 10px 15px -3px rgba(245, 158, 11, 0.3), 0 4px 6px -2px rgba(245, 158, 11, 0.15)',
+            duration: 0.2,
+            ease: 'power2.out'
+          });
+        });
+        
+        submitBtn.addEventListener('mouseleave', () => {
+          gsap.to(submitBtn, {
+            y: 0,
+            boxShadow: '0 4px 6px -1px rgba(245, 158, 11, 0.2), 0 2px 4px -1px rgba(245, 158, 11, 0.1)',
+            duration: 0.2,
+            ease: 'power2.out'
+          });
+        });
+      }
+    });
+    
+    // Enhanced form submission with animation
+    document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      
+      // Disable form during submission
+      const inputs = form.querySelectorAll('input, select, textarea, button');
+      inputs.forEach(input => input.disabled = true);
+      
+      // Show loading state
+      submitBtn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing...
+      `;
+      
+      // Simulate API call
+      setTimeout(() => {
+        // Success animation
+        gsap.to(form, {
+          y: -20,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'text-center py-10';
+            successMsg.innerHTML = `
+              <div class="mb-6">
+                <svg class="mx-auto h-16 w-16 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white mb-2">Success!</h3>
+              <p class="text-gray-300 mb-6">Your subscription has been created successfully.</p>
+              <button 
+                onclick="location.reload()" 
+                class="px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
+              >
+                Create Another
+              </button>
+            `;
+            
+            form.parentNode.replaceChild(successMsg, form);
+            
+            // Animate success message
+            gsap.fromTo(successMsg, 
+              { y: 30, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.7)' }
+            );
+          }
+        });
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
