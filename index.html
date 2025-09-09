@@ -63,8 +63,32 @@
   </div>
 
   <script>
-    // Helper function to handle slides
-    async function handleSubmit(formId, webhookUrl, outputId, nextButtonId, nextSlideId) {
+    // Poll n8n execution API for results
+    async function pollExecution(execId, outputElem, interval = 2000, maxAttempts = 10) {
+      let attempts = 0;
+      while (attempts < maxAttempts) {
+        attempts++;
+        try {
+          const res = await fetch(`https://automaton8n.eko.in/rest/executions/${execId}`, {
+            headers: { "Content-Type": "application/json" }
+          });
+          if (res.ok) {
+            const result = await res.json();
+            if (result && result.data) {
+              outputElem.innerText = "Output: " + JSON.stringify(result.data);
+              return;
+            }
+          }
+        } catch (err) {
+          console.error("Polling error:", err);
+        }
+        await new Promise(r => setTimeout(r, interval));
+      }
+      outputElem.innerText = "No output received from n8n.";
+    }
+
+    // Generic handler for slides
+    async function handleSubmit(formId, postUrl, outputId, nextButtonId, nextSlideId) {
       const form = document.getElementById(formId);
       const output = document.getElementById(outputId);
       const nextBtn = document.getElementById(nextButtonId);
@@ -74,20 +98,16 @@
         const formData = new FormData(form);
         const payload = Object.fromEntries(formData);
 
-        // Send POST request to n8n webhook
-        const res = await fetch(webhookUrl, {
+        const res = await fetch(postUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
+        const { executionId } = await res.json();
 
-        const result = await res.json();
-        output.innerText = "Output: " + JSON.stringify(result);
+        pollExecution(executionId, output);
 
-        // Enable next button
         nextBtn.disabled = false;
-
-        // Move to next slide
         nextBtn.addEventListener("click", () => {
           document.querySelector(".active").classList.remove("active");
           document.getElementById(nextSlideId).classList.add("active");
@@ -96,47 +116,59 @@
     }
 
     // Slide 1: Mobile
-    handleSubmit("form1", "https://automaton8n.eko.in/webhook-test/af583ebe-6fcd-4c46-8c9e-229aadc83d9d", "output1", "next1", "slide2");
+    handleSubmit(
+      "form1",
+      "https://automaton8n.eko.in/webhook/af583ebe-6fcd-4c46-8c9e-229aadc83d9d",
+      "output1", "next1", "slide2"
+    );
 
     // Slide 2: Email
-    handleSubmit("form2", "https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788", "output2", "next2", "slide3");
+    handleSubmit(
+      "form2",
+      "https://automaton8n.eko.in/webhook/90850350-e964-4fe5-8379-c85c0ae21788",
+      "output2", "next2", "slide3"
+    );
 
-    // Slide 3: PAN (special case)
+    // Slide 3: PAN (special because of change step)
     const form3 = document.getElementById("form3");
     const output3 = document.getElementById("output3");
     const next3 = document.getElementById("next3");
     const panNameSection = document.getElementById("panNameSection");
     const submitPanChange = document.getElementById("submitPanChange");
 
+    let panPayload = {};
+
     form3.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form3);
-      const payload = Object.fromEntries(formData);
+      panPayload = Object.fromEntries(formData);
 
-      const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
+      const res = await fetch("https://automaton8n.eko.in/webhook/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(panPayload)
       });
+      const { executionId } = await res.json();
 
-      const result = await res.json();
-      output3.innerText = "PAN Name: " + result.panName;
+      pollExecution(executionId, output3);
 
       // Show PAN change field
       panNameSection.style.display = "block";
+    });
 
-      submitPanChange.addEventListener("click", async () => {
-        const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
+    submitPanChange.addEventListener("click", async () => {
+      const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
 
-        await fetch("https://automaton8n.eko.in/webhook-test/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pan: payload.pan, changePanName: newPanName })
-        });
-
-        // Enable next after submit
-        next3.disabled = false;
+      const res = await fetch("https://automaton8n.eko.in/webhook/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName })
       });
+      const { executionId } = await res.json();
+
+      pollExecution(executionId, output3);
+
+      next3.disabled = false;
     });
 
     next3.addEventListener("click", () => {
@@ -144,7 +176,7 @@
       document.getElementById("slide4").classList.add("active");
     });
 
-    // Slide 4: Checkbox (last step)
+    // Slide 4: Checkbox
     const form4 = document.getElementById("form4");
     const output4 = document.getElementById("output4");
     const newOnboarding = document.getElementById("newOnboarding");
@@ -154,16 +186,15 @@
       const formData = new FormData(form4);
       const payload = Object.fromEntries(formData);
 
-      const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
+      const res = await fetch("https://automaton8n.eko.in/webhook/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
+      const { executionId } = await res.json();
 
-      const result = await res.json();
-      output4.innerText = "Output: " + JSON.stringify(result);
+      pollExecution(executionId, output4);
 
-      // Show New Onboarding button
       newOnboarding.style.display = "inline-block";
     });
 
@@ -180,5 +211,3 @@
   </script>
 </body>
 </html>
-
-
