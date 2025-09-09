@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multi-Slide Onboarding Form</title>
+  <title>Go-Live - Multi-Slide Onboarding Form</title>
   <style>
     * {
       margin: 0;
@@ -23,14 +23,28 @@
     }
 
     .container {
+      position: relative;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      padding: 40px;
+      padding: 20px 40px 40px 40px;
       width: 100%;
-      max-width: 500px;
+      max-width: 800px;
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .main-title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #ffffff, #e2e8f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
     }
 
     .progress-bar {
@@ -75,18 +89,49 @@
       background: linear-gradient(135deg, #10b981, #059669);
     }
 
+    .slides-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+      border-radius: 15px;
+    }
+
     .slide {
-      display: none;
-      animation: fadeIn 0.5s ease-in-out;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 30px;
+      box-sizing: border-box;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .slide.active {
-      display: block;
+      opacity: 1;
+      transform: translateX(0);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .slide.prev {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+
+    .slide.next {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    .slide.submitted {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
     }
 
     h3 {
@@ -168,6 +213,13 @@
       transform: translateY(0);
     }
 
+    button[type="submit"]:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .next-btn {
       width: 100%;
       padding: 15px;
@@ -193,6 +245,17 @@
       transform: none;
     }
 
+    .next-btn.enabled {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .next-btn.enabled:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    }
+
     .output {
       background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.3);
@@ -206,10 +269,22 @@
       word-break: break-all;
       max-height: 150px;
       overflow-y: auto;
+      animation: slideInUp 0.5s ease-out;
     }
 
     .output:empty {
       display: none;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     #panNameSection {
@@ -218,6 +293,7 @@
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
+      animation: slideInUp 0.5s ease-out;
     }
 
     #panNameSection label {
@@ -286,16 +362,32 @@
       .container {
         padding: 30px 20px;
         margin: 10px;
+        max-width: 95%;
       }
       
       h3 {
         font-size: 20px;
+      }
+
+      .main-title {
+        font-size: 24px;
+      }
+
+      .slides-container {
+        height: 450px;
+      }
+
+      .slide {
+        padding: 20px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Main Title -->
+    <h1 class="main-title">Go-Live</h1>
+
     <!-- Progress Bar -->
     <div class="progress-bar">
       <div class="step active" id="step1">1</div>
@@ -304,89 +396,92 @@
       <div class="step" id="step4">4</div>
     </div>
 
-    <!-- Slide 1: Mobile -->
-    <div class="slide active" id="slide1">
-      <h3>Enter Mobile Number</h3>
-      <p class="subtitle">We'll use this to verify your identity</p>
-      <form id="form1">
-        <label>
-          Mobile Number
-          <input type="tel" 
-                 name="mobile" 
-                 pattern="[6-9][0-9]{9}" 
-                 maxlength="10" 
-                 minlength="10" 
-                 required 
-                 placeholder="Enter 10-digit mobile number">
-        </label>
-        <button type="submit">Verify Mobile</button>
-      </form>
-      <div class="output" id="output1"></div>
-      <button class="next-btn" id="next1" disabled>Continue</button>
-    </div>
-
-    <!-- Slide 2: Email -->
-    <div class="slide" id="slide2">
-      <h3>Enter Email Address</h3>
-      <p class="subtitle">We'll send important updates to this address</p>
-      <form id="form2">
-        <label>
-          Email Address
-          <input type="email" 
-                 name="email" 
-                 required 
-                 placeholder="example@email.com">
-        </label>
-        <button type="submit">Verify Email</button>
-      </form>
-      <div class="output" id="output2"></div>
-      <button class="next-btn" id="next2" disabled>Continue</button>
-    </div>
-
-    <!-- Slide 3: PAN -->
-    <div class="slide" id="slide3">
-      <h3>Enter PAN Details</h3>
-      <p class="subtitle">This helps us verify your tax information</p>
-      <form id="form3">
-        <label>
-          PAN Number
-          <input type="text" 
-                 name="pan" 
-                 pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
-                 maxlength="10" 
-                 minlength="10" 
-                 style="text-transform:uppercase" 
-                 required 
-                 placeholder="ABCDE1234F">
-        </label>
-        <button type="submit">Verify PAN</button>
-      </form>
-      <div class="output" id="output3"></div>
-
-      <!-- Shown only after PAN Name appears -->
-      <div id="panNameSection" style="display:none;">
-        <label>Change PAN Name (optional)
-          <input type="text" name="changePanName" placeholder="Enter new name">
-        </label>
-        <button id="submitPanChange">Update PAN Name</button>
+    <!-- Slides Container -->
+    <div class="slides-container">
+      <!-- Slide 1: Mobile -->
+      <div class="slide active" id="slide1">
+        <h3>Enter Mobile Number</h3>
+        <p class="subtitle">We'll use this to verify your identity</p>
+        <form id="form1">
+          <label>
+            Mobile Number
+            <input type="tel" 
+                   name="mobile" 
+                   pattern="[6-9][0-9]{9}" 
+                   maxlength="10" 
+                   minlength="10" 
+                   required 
+                   placeholder="Enter 10-digit mobile number">
+          </label>
+          <button type="submit">Verify Mobile</button>
+        </form>
+        <div class="output" id="output1"></div>
+        <button class="next-btn" id="next1" disabled>Continue</button>
       </div>
 
-      <button class="next-btn" id="next3" disabled>Continue</button>
-    </div>
+      <!-- Slide 2: Email -->
+      <div class="slide" id="slide2">
+        <h3>Enter Email Address</h3>
+        <p class="subtitle">We'll send important updates to this address</p>
+        <form id="form2">
+          <label>
+            Email Address
+            <input type="email" 
+                   name="email" 
+                   required 
+                   placeholder="example@email.com">
+          </label>
+          <button type="submit">Verify Email</button>
+        </form>
+        <div class="output" id="output2"></div>
+        <button class="next-btn" id="next2" disabled>Continue</button>
+      </div>
 
-    <!-- Slide 4: Checkbox -->
-    <div class="slide" id="slide4">
-      <h3>Final Confirmation</h3>
-      <p class="subtitle">Please confirm to complete your onboarding</p>
-      <form id="form4">
-        <div class="checkbox-container">
-          <input type="checkbox" name="confirm" required>
-          <label class="checkbox-label">I confirm that all the information provided is accurate and I agree to the terms and conditions</label>
+      <!-- Slide 3: PAN -->
+      <div class="slide" id="slide3">
+        <h3>Enter PAN Details</h3>
+        <p class="subtitle">This helps us verify your tax information</p>
+        <form id="form3">
+          <label>
+            PAN Number
+            <input type="text" 
+                   name="pan" 
+                   pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" 
+                   maxlength="10" 
+                   minlength="10" 
+                   style="text-transform:uppercase" 
+                   required 
+                   placeholder="ABCDE1234F">
+          </label>
+          <button type="submit">Verify PAN</button>
+        </form>
+        <div class="output" id="output3"></div>
+
+        <!-- Shown only after PAN Name appears -->
+        <div id="panNameSection" style="display:none;">
+          <label>Change PAN Name (optional)
+            <input type="text" name="changePanName" placeholder="Enter new name">
+          </label>
+          <button id="submitPanChange">Update PAN Name</button>
         </div>
-        <button type="submit">Complete Onboarding</button>
-      </form>
-      <div class="output" id="output4"></div>
-      <button id="newOnboarding" style="display:none;">Start New Onboarding</button>
+
+        <button class="next-btn" id="next3" disabled>Continue</button>
+      </div>
+
+      <!-- Slide 4: Checkbox -->
+      <div class="slide" id="slide4">
+        <h3>Final Confirmation</h3>
+        <p class="subtitle">Please confirm to complete your onboarding</p>
+        <form id="form4">
+          <div class="checkbox-container">
+            <input type="checkbox" name="confirm" required>
+            <label class="checkbox-label">I confirm that all the information provided is accurate and I agree to the terms and conditions</label>
+          </div>
+          <button type="submit">Complete Onboarding</button>
+        </form>
+        <div class="output" id="output4"></div>
+        <button id="newOnboarding" style="display:none;">Start New Onboarding</button>
+      </div>
     </div>
   </div>
 
@@ -403,8 +498,39 @@
       });
     }
 
+    // Function to change slide interface after submission
+    function markSlideAsSubmitted(slideId, nextBtnId) {
+      const slide = document.getElementById(slideId);
+      const nextBtn = document.getElementById(nextBtnId);
+      
+      slide.classList.add('submitted');
+      nextBtn.classList.add('enabled');
+      nextBtn.disabled = false;
+      
+      // Disable form submission after success
+      const form = slide.querySelector('form');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '✓ Verified';
+    }
+
+    // Function to transition between slides horizontally
+    function transitionToSlide(currentSlideId, nextSlideId, stepNumber) {
+      const currentSlide = document.getElementById(currentSlideId);
+      const nextSlide = document.getElementById(nextSlideId);
+      
+      currentSlide.classList.remove('active');
+      currentSlide.classList.add('prev');
+      
+      setTimeout(() => {
+        nextSlide.classList.remove('next');
+        nextSlide.classList.add('active');
+        updateProgress(stepNumber);
+      }, 100);
+    }
+
     // Generic handler for slides (direct response, no polling)
-    async function handleSubmit(formId, postUrl, outputId, nextButtonId, nextSlideId, stepNumber) {
+    async function handleSubmit(formId, postUrl, outputId, nextButtonId, currentSlideId, nextSlideId, stepNumber) {
       const form = document.getElementById(formId);
       const output = document.getElementById(outputId);
       const nextBtn = document.getElementById(nextButtonId);
@@ -424,12 +550,13 @@
           const result = await res.json();
           output.innerText = JSON.stringify(result, null, 2);
 
-          nextBtn.disabled = false;
-          nextBtn.addEventListener("click", () => {
-            document.querySelector(".active").classList.remove("active");
-            document.getElementById(nextSlideId).classList.add("active");
-            updateProgress(stepNumber + 1);
-          });
+          // Mark slide as submitted and change interface
+          markSlideAsSubmitted(currentSlideId, nextButtonId);
+          
+          // Add click handler for next button
+          nextBtn.onclick = () => {
+            transitionToSlide(currentSlideId, nextSlideId, stepNumber + 1);
+          };
         } catch (error) {
           output.innerText = "Error: " + error.message;
         }
@@ -440,14 +567,14 @@
     handleSubmit(
       "form1",
       "https://automaton8n.eko.in/webhook/af583ebe-6fcd-4c46-8c9e-229aadc83d9d",
-      "output1", "next1", "slide2", 1
+      "output1", "next1", "slide1", "slide2", 1
     );
 
     // Slide 2: Email
     handleSubmit(
       "form2",
       "https://automaton8n.eko.in/webhook/90850350-e964-4fe5-8379-c85c0ae21788",
-      "output2", "next2", "slide3", 2
+      "output2", "next2", "slide2", "slide3", 2
     );
 
     // Slide 3: PAN
@@ -476,6 +603,13 @@
 
         // Show PAN change field
         panNameSection.style.display = "block";
+        
+        // Change interface after PAN submission
+        const slide3 = document.getElementById("slide3");
+        slide3.classList.add('submitted');
+        const submitBtn = form3.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ PAN Verified';
       } catch (error) {
         output3.innerText = "Error: " + error.message;
       }
@@ -494,17 +628,17 @@
         const result = await res.json();
         output3.innerText = JSON.stringify(result, null, 2);
 
-        next3.disabled = false;
+        markSlideAsSubmitted("slide3", "next3");
+        submitPanChange.disabled = true;
+        submitPanChange.textContent = '✓ Name Updated';
       } catch (error) {
         output3.innerText = "Error: " + error.message;
       }
     });
 
-    next3.addEventListener("click", () => {
-      document.querySelector(".active").classList.remove("active");
-      document.getElementById("slide4").classList.add("active");
-      updateProgress(4);
-    });
+    next3.onclick = () => {
+      transitionToSlide("slide3", "slide4", 4);
+    };
 
     // Slide 4: Checkbox
     const form4 = document.getElementById("form4");
@@ -526,6 +660,13 @@
         const result = await res.json();
         output4.innerText = JSON.stringify(result, null, 2);
 
+        // Change interface after final submission
+        const slide4 = document.getElementById("slide4");
+        slide4.classList.add('submitted');
+        const submitBtn = form4.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ Onboarding Complete';
+        
         newOnboarding.style.display = "inline-block";
       } catch (error) {
         output4.innerText = "Error: " + error.message;
@@ -534,13 +675,39 @@
 
     // Restart onboarding
     newOnboarding.addEventListener("click", () => {
-      document.querySelector(".active").classList.remove("active");
+      // Reset all slides
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active', 'prev', 'next', 'submitted');
+      });
       document.getElementById("slide1").classList.add("active");
+      
+      // Reset forms and buttons
       document.querySelectorAll("form").forEach(f => f.reset());
       document.querySelectorAll(".output").forEach(o => o.innerText = "");
       document.getElementById("panNameSection").style.display = "none";
-      document.querySelectorAll(".next-btn").forEach(b => b.disabled = true);
+      
+      // Reset next buttons
+      document.querySelectorAll(".next-btn").forEach(b => {
+        b.disabled = true;
+        b.classList.remove('enabled');
+      });
+      
+      // Reset submit buttons
+      document.querySelectorAll('button[type="submit"]').forEach(btn => {
+        btn.disabled = false;
+        if (btn.id === 'submitPanChange') {
+          btn.textContent = 'Update PAN Name';
+        } else {
+          const form = btn.closest('form');
+          if (form.id === 'form1') btn.textContent = 'Verify Mobile';
+          else if (form.id === 'form2') btn.textContent = 'Verify Email';
+          else if (form.id === 'form3') btn.textContent = 'Verify PAN';
+          else if (form.id === 'form4') btn.textContent = 'Complete Onboarding';
+        }
+      });
+      
       newOnboarding.style.display = "none";
+      updateProgress(1);
       updateProgress(1);
     });
 
