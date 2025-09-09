@@ -63,31 +63,7 @@
   </div>
 
   <script>
-    // Poll n8n execution API for results
-    async function pollExecution(execId, outputElem, interval = 2000, maxAttempts = 10) {
-      let attempts = 0;
-      while (attempts < maxAttempts) {
-        attempts++;
-        try {
-          const res = await fetch(`https://automaton8n.eko.in/rest/executions/${execId}`, {
-            headers: { "Content-Type": "application/json" }
-          });
-          if (res.ok) {
-            const result = await res.json();
-            if (result && result.data) {
-              outputElem.innerText = "Output: " + JSON.stringify(result.data);
-              return;
-            }
-          }
-        } catch (err) {
-          console.error("Polling error:", err);
-        }
-        await new Promise(r => setTimeout(r, interval));
-      }
-      outputElem.innerText = "No output received from n8n.";
-    }
-
-    // Generic handler for slides
+    // Generic handler for slides (direct response, no polling)
     async function handleSubmit(formId, postUrl, outputId, nextButtonId, nextSlideId) {
       const form = document.getElementById(formId);
       const output = document.getElementById(outputId);
@@ -103,9 +79,9 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        const { executionId } = await res.json();
 
-        pollExecution(executionId, output);
+        const result = await res.json();
+        output.innerText = "Output: " + JSON.stringify(result);
 
         nextBtn.disabled = false;
         nextBtn.addEventListener("click", () => {
@@ -118,7 +94,7 @@
     // Slide 1: Mobile
     handleSubmit(
       "form1",
-      "https://automaton8n.eko.in/webhook-test/af583ebe-6fcd-4c46-8c9e-229aadc83d9d",
+      "https://automaton8n.eko.in/webhook/af583ebe-6fcd-4c46-8c9e-229aadc83d9d",
       "output1", "next1", "slide2"
     );
 
@@ -129,7 +105,7 @@
       "output2", "next2", "slide3"
     );
 
-    // Slide 3: PAN (special because of change step)
+    // Slide 3: PAN
     const form3 = document.getElementById("form3");
     const output3 = document.getElementById("output3");
     const next3 = document.getElementById("next3");
@@ -148,9 +124,9 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(panPayload)
       });
-      const { executionId } = await res.json();
 
-      pollExecution(executionId, output3);
+      const result = await res.json();
+      output3.innerText = "Output: " + JSON.stringify(result);
 
       // Show PAN change field
       panNameSection.style.display = "block";
@@ -164,9 +140,9 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName })
       });
-      const { executionId } = await res.json();
 
-      pollExecution(executionId, output3);
+      const result = await res.json();
+      output3.innerText = "Output: " + JSON.stringify(result);
 
       next3.disabled = false;
     });
@@ -191,9 +167,9 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      const { executionId } = await res.json();
 
-      pollExecution(executionId, output4);
+      const result = await res.json();
+      output4.innerText = "Output: " + JSON.stringify(result);
 
       newOnboarding.style.display = "inline-block";
     });
@@ -211,4 +187,3 @@
   </script>
 </body>
 </html>
-
