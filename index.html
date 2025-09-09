@@ -99,7 +99,7 @@
     handleSubmit("form1", "https://automaton8n.eko.in/webhook-test/af583ebe-6fcd-4c46-8c9e-229aadc83d9d", "output1", "next1", "slide2");
 
     // Slide 2: Email
-    handleSubmit("form2", "https://your-n8n-webhook-url-2", "output2", "next2", "slide3");
+    handleSubmit("form2", "https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788", "output2", "next2", "slide3");
 
     // Slide 3: PAN (special case)
     const form3 = document.getElementById("form3");
@@ -113,7 +113,7 @@
       const formData = new FormData(form3);
       const payload = Object.fromEntries(formData);
 
-      const res = await fetch("https://your-n8n-webhook-url-3", {
+      const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -128,7 +128,7 @@
       submitPanChange.addEventListener("click", async () => {
         const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
 
-        await fetch("https://your-n8n-webhook-url-3-change", {
+        await fetch("https://automaton8n.eko.in/webhook-test/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pan: payload.pan, changePanName: newPanName })
@@ -154,7 +154,7 @@
       const formData = new FormData(form4);
       const payload = Object.fromEntries(formData);
 
-      const res = await fetch("https://your-n8n-webhook-url-4", {
+      const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -180,4 +180,5 @@
   </script>
 </body>
 </html>
+
 
