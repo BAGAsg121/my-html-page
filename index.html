@@ -215,8 +215,134 @@
         next2.onclick = () => transitionToSlide("slide2", "slide3", 3);
       } catch (error) { output2.innerText = "Error: " + error.message; }
     });
+// Slide 3: PAN
+    const form3 = document.getElementById("form3");
+    const output3 = document.getElementById("output3");
+    const next3 = document.getElementById("next3");
+    const panNameSection = document.getElementById("panNameSection");
+    const submitPanChange = document.getElementById("submitPanChange");
+    let panPayload = {};
 
-    // Slide 3 & 4 remain as in your code (unchanged except progress updates)...
+    form3.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form3);
+      panPayload = Object.fromEntries(formData);
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(panPayload)
+        });
+        const result = await res.json();
+        output3.innerText = JSON.stringify(result, null, 2);
+
+        // Show PAN change field
+        panNameSection.style.display = "block";
+
+        // Change interface after PAN submission
+        const slide3 = document.getElementById("slide3");
+        slide3.classList.add('submitted');
+        const submitBtn = form3.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ PAN Verified';
+      } catch (error) {
+        output3.innerText = "Error: " + error.message;
+      }
+    });
+
+    submitPanChange.addEventListener("click", async () => {
+      const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName })
+        });
+        const result = await res.json();
+        output3.innerText = JSON.stringify(result, null, 2);
+
+        markSlideAsSubmitted("slide3", "next3");
+        submitPanChange.disabled = true;
+        submitPanChange.textContent = '✓ Name Updated';
+      } catch (error) {
+        output3.innerText = "Error: " + error.message;
+      }
+    });
+
+    next3.onclick = () => {
+      transitionToSlide("slide3", "slide4", 4);
+    };
+
+    // Slide 4: Checkbox
+    const form4 = document.getElementById("form4");
+    const output4 = document.getElementById("output4");
+    const newOnboarding = document.getElementById("newOnboarding");
+
+    form4.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form4);
+      const payload = Object.fromEntries(formData);
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        output4.innerText = JSON.stringify(result, null, 2);
+
+        // Change interface after final submission
+        const slide4 = document.getElementById("slide4");
+        slide4.classList.add('submitted');
+        const submitBtn = form4.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ Onboarding Complete';
+        newOnboarding.style.display = "inline-block";
+      } catch (error) {
+        output4.innerText = "Error: " + error.message;
+      }
+    });
+
+    // Restart onboarding
+    newOnboarding.addEventListener("click", () => {
+      // Reset all slides
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active', 'prev', 'next', 'submitted');
+      });
+      document.getElementById("slide1").classList.add("active");
+
+      // Reset forms and buttons
+      document.querySelectorAll("form").forEach(f => f.reset());
+      document.querySelectorAll(".output").forEach(o => o.innerText = "");
+      document.getElementById("panNameSection").style.display = "none";
+
+      // Reset next buttons
+      document.querySelectorAll(".next-btn").forEach(b => {
+        b.disabled = true;
+        b.classList.remove('enabled');
+      });
+
+      // Reset submit buttons
+      document.querySelectorAll('button[type="submit"]').forEach(btn => {
+        btn.disabled = false;
+        if (btn.id === 'submitPanChange') {
+          btn.textContent = 'Update PAN Name';
+        } else {
+          const form = btn.closest('form');
+          if (form.id === 'form1') btn.textContent = 'Verify Mobile';
+          else if (form.id === 'form2') btn.textContent = 'Verify Email';
+          else if (form.id === 'form3') btn.textContent = 'Verify PAN';
+          else if (form.id === 'form4') btn.textContent = 'Complete Onboarding';
+        }
+      });
+
+      newOnboarding.style.display = "none";
+      updateProgress(1);
+      updateProgress(1);
+    });
+
+    // Initialize progress bar
+    updateProgress(1);
   </script>
 </body>
 </html>
