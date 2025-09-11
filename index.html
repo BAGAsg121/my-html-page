@@ -205,7 +205,7 @@
       let payload = Object.fromEntries(formData);
       payload.mobile = userMobile; // attach mobile
       try {
-        const res = await fetch("https://automaton8n.eko.in/webhook/90850350-e964-4fe5-8379-c85c0ae21788", {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788", {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
@@ -346,3 +346,4 @@
   </script>
 </body>
 </html>
+
