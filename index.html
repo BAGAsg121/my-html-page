@@ -89,36 +89,36 @@
         <button class="next-btn" id="next1" disabled>Continue</button>
       </div>
 
-      <!-- Slide 2 -->
+      <!-- Slide 2 (formerly Slide 3) - PAN Details -->
       <div class="slide" id="slide2">
-        <h3>Enter Email Address</h3>
-        <p class="subtitle">We'll send important updates to this address</p>
-        <form id="form2">
-          <label>Email Address
-            <input type="email" name="email" required placeholder="example@email.com">
-          </label>
-          <button type="submit">Verify Email</button>
-        </form>
-        <div class="output" id="output2"></div>
-        <button class="next-btn" id="next2" disabled>Continue</button>
-      </div>
-
-      <!-- Slide 3 -->
-      <div class="slide" id="slide3">
         <h3>Enter PAN Details</h3>
-        <form id="form3">
+        <form id="form2">
           <label>PAN Number
             <input type="text" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" minlength="10" style="text-transform:uppercase" required placeholder="ABCDE1234F">
           </label>
           <button type="submit">Verify PAN</button>
         </form>
-        <div class="output" id="output3"></div>
+        <div class="output" id="output2"></div>
         <div id="panNameSection" style="display:none;">
           <label>Change PAN Name (optional)
             <input type="text" name="changePanName" placeholder="Enter new name">
           </label>
           <button id="submitPanChange">Update PAN Name</button>
         </div>
+        <button class="next-btn" id="next2" disabled>Continue</button>
+      </div>
+
+      <!-- Slide 3 (formerly Slide 2) - Email Address -->
+      <div class="slide" id="slide3">
+        <h3>Enter Email Address</h3>
+        <p class="subtitle">We'll send important updates to this address</p>
+        <form id="form3">
+          <label>Email Address
+            <input type="email" name="email" required placeholder="example@email.com">
+          </label>
+          <button type="submit">Verify Email</button>
+        </form>
+        <div class="output" id="output3"></div>
         <button class="next-btn" id="next3" disabled>Continue</button>
       </div>
 
@@ -174,7 +174,7 @@
     // ✅ Global storage
     let userMobile = "";
 
-    // Slide 1
+    // Slide 1 - Mobile Number
     const form1 = document.getElementById("form1");
     const output1 = document.getElementById("output1");
     const next1 = document.getElementById("next1");
@@ -195,37 +195,17 @@
       } catch (error) { output1.innerText = "Error: " + error.message; }
     });
 
-    // Slide 2 (send email + mobile)
+    // Slide 2 - PAN Details (formerly slide 3)
     const form2 = document.getElementById("form2");
     const output2 = document.getElementById("output2");
     const next2 = document.getElementById("next2");
-    form2.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form2);
-      let payload = Object.fromEntries(formData);
-      payload.mobile = userMobile; // attach mobile
-      try {
-        const res = await fetch("https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788", {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        output2.innerText = JSON.stringify(result, null, 2);
-        markSlideAsSubmitted("slide2", "next2");
-        next2.onclick = () => transitionToSlide("slide2", "slide3", 3);
-      } catch (error) { output2.innerText = "Error: " + error.message; }
-    });
-// Slide 3: PAN
-    const form3 = document.getElementById("form3");
-    const output3 = document.getElementById("output3");
-    const next3 = document.getElementById("next3");
     const panNameSection = document.getElementById("panNameSection");
     const submitPanChange = document.getElementById("submitPanChange");
     let panPayload = {};
 
-    form3.addEventListener("submit", async (e) => {
+    form2.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(form3);
+      const formData = new FormData(form2);
       panPayload = Object.fromEntries(formData);
       try {
         const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
@@ -234,19 +214,19 @@
           body: JSON.stringify(panPayload)
         });
         const result = await res.json();
-        output3.innerText = JSON.stringify(result, null, 2);
+        output2.innerText = JSON.stringify(result, null, 2);
 
         // Show PAN change field
         panNameSection.style.display = "block";
 
         // Change interface after PAN submission
-        const slide3 = document.getElementById("slide3");
-        slide3.classList.add('submitted');
-        const submitBtn = form3.querySelector('button[type="submit"]');
+        const slide2 = document.getElementById("slide2");
+        slide2.classList.add('submitted');
+        const submitBtn = form2.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = '✓ PAN Verified';
       } catch (error) {
-        output3.innerText = "Error: " + error.message;
+        output2.innerText = "Error: " + error.message;
       }
     });
 
@@ -259,19 +239,40 @@
           body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName })
         });
         const result = await res.json();
-        output3.innerText = JSON.stringify(result, null, 2);
+        output2.innerText = JSON.stringify(result, null, 2);
 
-        markSlideAsSubmitted("slide3", "next3");
+        markSlideAsSubmitted("slide2", "next2");
         submitPanChange.disabled = true;
         submitPanChange.textContent = '✓ Name Updated';
       } catch (error) {
-        output3.innerText = "Error: " + error.message;
+        output2.innerText = "Error: " + error.message;
       }
     });
 
-    next3.onclick = () => {
-      transitionToSlide("slide3", "slide4", 4);
+    next2.onclick = () => {
+      transitionToSlide("slide2", "slide3", 3);
     };
+
+    // Slide 3 - Email Address (formerly slide 2, send email + mobile)
+    const form3 = document.getElementById("form3");
+    const output3 = document.getElementById("output3");
+    const next3 = document.getElementById("next3");
+    form3.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form3);
+      let payload = Object.fromEntries(formData);
+      payload.mobile = userMobile; // attach mobile
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        output3.innerText = JSON.stringify(result, null, 2);
+        markSlideAsSubmitted("slide3", "next3");
+        next3.onclick = () => transitionToSlide("slide3", "slide4", 4);
+      } catch (error) { output3.innerText = "Error: " + error.message; }
+    });
 
     // Slide 4: Checkbox
     const form4 = document.getElementById("form4");
@@ -330,8 +331,8 @@
         } else {
           const form = btn.closest('form');
           if (form.id === 'form1') btn.textContent = 'Verify Mobile';
-          else if (form.id === 'form2') btn.textContent = 'Verify Email';
-          else if (form.id === 'form3') btn.textContent = 'Verify PAN';
+          else if (form.id === 'form2') btn.textContent = 'Verify PAN';
+          else if (form.id === 'form3') btn.textContent = 'Verify Email';
           else if (form.id === 'form4') btn.textContent = 'Complete Onboarding';
         }
       });
@@ -346,4 +347,3 @@
   </script>
 </body>
 </html>
-
