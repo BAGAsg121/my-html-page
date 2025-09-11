@@ -584,7 +584,7 @@
     // Slide 2: Email
     handleSubmit(
       "form2",
-      "https://automaton8n.eko.in/webhook/90850350-e964-4fe5-8379-c85c0ae21788",
+      "https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788",
       "output2", "next2", "slide2", "slide3", 2
     );
 
@@ -603,7 +603,7 @@
       panPayload = Object.fromEntries(formData);
 
       try {
-        const res = await fetch("https://automaton8n.eko.in/webhook/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(panPayload)
@@ -630,7 +630,7 @@
       const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
 
       try {
-        const res = await fetch("https://automaton8n.eko.in/webhook/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName })
@@ -662,7 +662,7 @@
       const payload = Object.fromEntries(formData);
 
       try {
-        const res = await fetch("https://automaton8n.eko.in/webhook/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
@@ -727,4 +727,5 @@
   </script>
 </body>
 </html>
+
 
