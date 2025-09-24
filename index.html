@@ -413,19 +413,39 @@
       } catch (error) { output1.innerText = "Error: " + error.message; }
     });
 
-    // Slide 2 - PAN Details (formerly slide 3)
+    
+
+    // Slide 2 - Email Address (formerly slide 2, send email + mobile)
     const form2 = document.getElementById("form2");
     const output2 = document.getElementById("output2");
     const next2 = document.getElementById("next2");
+    form3.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form2);
+      let payload = Object.fromEntries(formData);
+      payload.mobile = userMobile; // attach mobile
+      userEmail = payload.email
+        const result = await res.json();
+        output2.innerText = 'Email Stored';
+        markSlideAsSubmitted("slide2", "next2");
+        next3.onclick = () => transitionToSlide("slide2", "slide3", 3);
+      } catch (error) { output2.innerText = "Error: " + error.message; }
+    });
+
+    // Slide 3 - PAN Details (formerly slide 3)
+    const form3 = document.getElementById("form3");
+    const output3 = document.getElementById("output3");
+    const next3 = document.getElementById("next3");
     const panNameSection = document.getElementById("panNameSection");
     const submitPanChange = document.getElementById("submitPanChange");
     let panPayload = {};
 
     form2.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(form2);
+      const formData = new FormData(form3);
       panPayload = Object.fromEntries(formData);
       panPayload.mobile = userMobile; // attach mobile number
+      panPayload.email = userEmail;
       try {
         const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
           method: "POST",
@@ -433,19 +453,19 @@
           body: JSON.stringify(panPayload)
         });
         const result = await res.json();
-        output2.innerText = JSON.stringify(result, null, 2);
+        output3.innerText = JSON.stringify(result, null, 3);
 
         // Show PAN change field
         panNameSection.style.display = "block";
 
         // Change interface after PAN submission
-        const slide2 = document.getElementById("slide2");
+        const slide3 = document.getElementById("slide3");
         slide2.classList.add('submitted');
-        const submitBtn = form2.querySelector('button[type="submit"]');
+        const submitBtn = form3.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = '✓ PAN Verified';
       } catch (error) {
-        output2.innerText = "Error: " + error.message;
+        output3.innerText = "Error: " + error.message;
       }
     });
 
@@ -458,9 +478,9 @@
           body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName, panPayload })
         });
         const result = await res.json();
-        output2.innerText = JSON.stringify(result, null, 2);
+        output3.innerText = JSON.stringify(result, null, 3);
 
-        markSlideAsSubmitted("slide2", "next2");
+        markSlideAsSubmitted("slide3", "next3");
         submitPanChange.disabled = true;
         submitPanChange.textContent = '✓ Name Updated';
       } catch (error) {
@@ -469,29 +489,8 @@
     });
 
     next2.onclick = () => {
-      transitionToSlide("slide2", "slide3", 3);
+      transitionToSlide("slide3", "slide4", 4);
     };
-
-    // Slide 3 - Email Address (formerly slide 2, send email + mobile)
-    const form3 = document.getElementById("form3");
-    const output3 = document.getElementById("output3");
-    const next3 = document.getElementById("next3");
-    form3.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form3);
-      let payload = Object.fromEntries(formData);
-      payload.mobile = userMobile; // attach mobile
-      try {
-        const res = await fetch("https://automaton8n.eko.in/webhook-test/90850350-e964-4fe5-8379-c85c0ae21788", {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        output3.innerText = JSON.stringify(result, null, 2);
-        markSlideAsSubmitted("slide3", "next3");
-        next3.onclick = () => transitionToSlide("slide3", "slide4", 4);
-      } catch (error) { output3.innerText = "Error: " + error.message; }
-    });
 
     // Slide 4: Checkbox
     const form4 = document.getElementById("form4");
@@ -566,6 +565,7 @@
   </script>
 </body>
 </html>
+
 
 
 
