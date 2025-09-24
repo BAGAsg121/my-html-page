@@ -305,9 +305,7 @@
         <button class="next-btn" id="next1" disabled>Continue</button>
       </div>
 
-      
-
-      <!-- Slide 2 (formerly Slide 2) - Email Address -->
+      <!-- Slide 2 - Email Address -->
       <div class="slide" id="slide2">
         <h3>Enter Email Address</h3>
         <p class="subtitle">We'll send important updates to this address</p>
@@ -321,10 +319,10 @@
         <button class="next-btn" id="next2" disabled>Continue</button>
       </div>
 
-      <!-- Slide 3 (formerly Slide 3) - PAN Details -->
+      <!-- Slide 3 - PAN Details -->
       <div class="slide" id="slide3">
         <h3>Enter PAN Details</h3>
-        <form id="form2">
+        <form id="form3">
           <label>PAN Number
             <input type="text" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" minlength="10" style="text-transform:uppercase" required placeholder="ABCDE1234F">
           </label>
@@ -391,6 +389,7 @@
 
     // ✅ Global storage
     let userMobile = "";
+    let userEmail = "";
 
     // Slide 1 - Mobile Number
     const form1 = document.getElementById("form1");
@@ -413,26 +412,24 @@
       } catch (error) { output1.innerText = "Error: " + error.message; }
     });
 
-    
-
-    // Slide 2 - Email Address (formerly slide 2, send email + mobile)
+    // Slide 2 - Email Address
     const form2 = document.getElementById("form2");
     const output2 = document.getElementById("output2");
     const next2 = document.getElementById("next2");
-    form3.addEventListener("submit", async (e) => {
+    form2.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form2);
       let payload = Object.fromEntries(formData);
       payload.mobile = userMobile; // attach mobile
-      userEmail = payload.email
-        const result = await res.json();
+      userEmail = payload.email;
+      try {
         output2.innerText = 'Email Stored';
         markSlideAsSubmitted("slide2", "next2");
-        next3.onclick = () => transitionToSlide("slide2", "slide3", 3);
+        next2.onclick = () => transitionToSlide("slide2", "slide3", 3);
       } catch (error) { output2.innerText = "Error: " + error.message; }
     });
 
-    // Slide 3 - PAN Details (formerly slide 3)
+    // Slide 3 - PAN Details
     const form3 = document.getElementById("form3");
     const output3 = document.getElementById("output3");
     const next3 = document.getElementById("next3");
@@ -440,7 +437,7 @@
     const submitPanChange = document.getElementById("submitPanChange");
     let panPayload = {};
 
-    form2.addEventListener("submit", async (e) => {
+    form3.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form3);
       panPayload = Object.fromEntries(formData);
@@ -460,7 +457,7 @@
 
         // Change interface after PAN submission
         const slide3 = document.getElementById("slide3");
-        slide2.classList.add('submitted');
+        slide3.classList.add('submitted');
         const submitBtn = form3.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = '✓ PAN Verified';
@@ -484,11 +481,11 @@
         submitPanChange.disabled = true;
         submitPanChange.textContent = '✓ Name Updated';
       } catch (error) {
-        output2.innerText = "Error: " + error.message;
+        output3.innerText = "Error: " + error.message;
       }
     });
 
-    next2.onclick = () => {
+    next3.onclick = () => {
       transitionToSlide("slide3", "slide4", 4);
     };
 
@@ -549,14 +546,13 @@
         } else {
           const form = btn.closest('form');
           if (form.id === 'form1') btn.textContent = 'Verify Mobile';
-          else if (form.id === 'form2') btn.textContent = 'Verify PAN';
-          else if (form.id === 'form3') btn.textContent = 'Verify Email';
+          else if (form.id === 'form2') btn.textContent = 'Verify Email';
+          else if (form.id === 'form3') btn.textContent = 'Verify PAN';
           else if (form.id === 'form4') btn.textContent = 'Complete Onboarding';
         }
       });
 
       newOnboarding.style.display = "none";
-      updateProgress(1);
       updateProgress(1);
     });
 
@@ -565,11 +561,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
