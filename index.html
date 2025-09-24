@@ -390,6 +390,7 @@
     // ✅ Global storage
     let userMobile = "";
     let userEmail = "";
+    let userPan = "";
 
     // Slide 1 - Mobile Number
     const form1 = document.getElementById("form1");
@@ -423,7 +424,7 @@
       payload.mobile = userMobile; // attach mobile
       userEmail = payload.email;
       try {
-        output2.innerText = 'Email Stored';
+        output2.innerText = 'Email Stored: ' + userEmail;
         markSlideAsSubmitted("slide2", "next2");
         next2.onclick = () => transitionToSlide("slide2", "slide3", 3);
       } catch (error) { output2.innerText = "Error: " + error.message; }
@@ -443,6 +444,7 @@
       panPayload = Object.fromEntries(formData);
       panPayload.mobile = userMobile; // attach mobile number
       panPayload.email = userEmail;
+      userPan = panPayload.pan;
       try {
         const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
           method: "POST",
@@ -461,6 +463,11 @@
         const submitBtn = form3.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = '✓ PAN Verified';
+
+        // Enable next button automatically after PAN verification
+        next3.classList.add('enabled');
+        next3.disabled = false;
+        next3.onclick = () => transitionToSlide("slide3", "slide4", 4);
       } catch (error) {
         output3.innerText = "Error: " + error.message;
       }
@@ -477,7 +484,6 @@
         const result = await res.json();
         output3.innerText = JSON.stringify(result, null, 3);
 
-        markSlideAsSubmitted("slide3", "next3");
         submitPanChange.disabled = true;
         submitPanChange.textContent = '✓ Name Updated';
       } catch (error) {
@@ -485,11 +491,7 @@
       }
     });
 
-    next3.onclick = () => {
-      transitionToSlide("slide3", "slide4", 4);
-    };
-
-    // Slide 4: Checkbox
+    // Slide 4: Final Confirmation
     const form4 = document.getElementById("form4");
     const output4 = document.getElementById("output4");
     const newOnboarding = document.getElementById("newOnboarding");
@@ -497,19 +499,18 @@
     form4.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form4);
-      let checkPayload = {};
-
-    form4.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form4);
-      checkPayload = Object.fromEntries(formData);
-      checkPayload.mobile = userMobile; // attach mobile number
-      checkPayload.email = userEmail;
+      const checkPayload = {
+        mobile: userMobile,
+        email: userEmail,
+        pan: userPan,
+        confirm: formData.get('confirm') ? true : false
+      };
+      
       try {
         const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pan: checkPayload.pan, checkPayload.mobile })
+          body: JSON.stringify(checkPayload)
         });
         const result = await res.json();
         output4.innerText = JSON.stringify(result, null, 2);
@@ -528,6 +529,12 @@
 
     // Restart onboarding
     newOnboarding.addEventListener("click", () => {
+      // Reset global variables
+      userMobile = "";
+      userEmail = "";
+      userPan = "";
+      panPayload = {};
+
       // Reset all slides
       document.querySelectorAll('.slide').forEach(slide => {
         slide.classList.remove('active', 'prev', 'next', 'submitted');
@@ -543,21 +550,23 @@
       document.querySelectorAll(".next-btn").forEach(b => {
         b.disabled = true;
         b.classList.remove('enabled');
+        b.onclick = null;
       });
 
       // Reset submit buttons
       document.querySelectorAll('button[type="submit"]').forEach(btn => {
         btn.disabled = false;
-        if (btn.id === 'submitPanChange') {
-          btn.textContent = 'Update PAN Name';
-        } else {
-          const form = btn.closest('form');
-          if (form.id === 'form1') btn.textContent = 'Verify Mobile';
-          else if (form.id === 'form2') btn.textContent = 'Verify Email';
-          else if (form.id === 'form3') btn.textContent = 'Verify PAN';
-          else if (form.id === 'form4') btn.textContent = 'Complete Onboarding';
-        }
+        const form = btn.closest('form');
+        if (form.id === 'form1') btn.textContent = 'Verify Mobile';
+        else if (form.id === 'form2') btn.textContent = 'Verify Email';
+        else if (form.id === 'form3') btn.textContent = 'Verify PAN';
+        else if (form.id === 'form4') btn.textContent = 'Complete Onboarding';
       });
+
+      // Reset PAN change button
+      const panChangeBtn = document.getElementById('submitPanChange');
+      panChangeBtn.disabled = false;
+      panChangeBtn.textContent = 'Update PAN Name';
 
       newOnboarding.style.display = "none";
       updateProgress(1);
@@ -568,5 +577,3 @@
   </script>
 </body>
 </html>
-
-
