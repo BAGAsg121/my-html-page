@@ -305,8 +305,24 @@
         <button class="next-btn" id="next1" disabled>Continue</button>
       </div>
 
-      <!-- Slide 2 (formerly Slide 3) - PAN Details -->
+      
+
+      <!-- Slide 2 (formerly Slide 2) - Email Address -->
       <div class="slide" id="slide2">
+        <h3>Enter Email Address</h3>
+        <p class="subtitle">We'll send important updates to this address</p>
+        <form id="form2">
+          <label>Email Address
+            <input type="email" name="email" required placeholder="example@email.com">
+          </label>
+          <button type="submit">Verify Email</button>
+        </form>
+        <div class="output" id="output2"></div>
+        <button class="next-btn" id="next2" disabled>Continue</button>
+      </div>
+
+      <!-- Slide 3 (formerly Slide 3) - PAN Details -->
+      <div class="slide" id="slide3">
         <h3>Enter PAN Details</h3>
         <form id="form2">
           <label>PAN Number
@@ -314,27 +330,13 @@
           </label>
           <button type="submit">Verify PAN</button>
         </form>
-        <div class="output" id="output2"></div>
+        <div class="output" id="output3"></div>
         <div id="panNameSection" style="display:none;">
           <label>Change PAN Name (optional)
             <input type="text" name="changePanName" placeholder="Enter new name">
           </label>
           <button id="submitPanChange">Update PAN Name</button>
         </div>
-        <button class="next-btn" id="next2" disabled>Continue</button>
-      </div>
-
-      <!-- Slide 3 (formerly Slide 2) - Email Address -->
-      <div class="slide" id="slide3">
-        <h3>Enter Email Address</h3>
-        <p class="subtitle">We'll send important updates to this address</p>
-        <form id="form3">
-          <label>Email Address
-            <input type="email" name="email" required placeholder="example@email.com">
-          </label>
-          <button type="submit">Verify Email</button>
-        </form>
-        <div class="output" id="output3"></div>
         <button class="next-btn" id="next3" disabled>Continue</button>
       </div>
 
@@ -564,6 +566,7 @@
   </script>
 </body>
 </html>
+
 
 
 
