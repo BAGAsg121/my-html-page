@@ -425,7 +425,7 @@
       panPayload = Object.fromEntries(formData);
       panPayload.mobile = userMobile; // attach mobile number
       try {
-        const res = await fetch("https://automaton8n.eko.in/webhook/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(panPayload)
@@ -564,6 +564,7 @@
   </script>
 </body>
 </html>
+
 
 
 
