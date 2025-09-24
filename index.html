@@ -502,7 +502,7 @@
         const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload, panPayload)
         });
         const result = await res.json();
         output4.innerText = JSON.stringify(result, null, 2);
@@ -561,3 +561,4 @@
   </script>
 </body>
 </html>
+
