@@ -450,7 +450,7 @@
     submitPanChange.addEventListener("click", async () => {
       const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
       try {
-        const res = await fetch("https://automaton8n.eko.in/webhook-test/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
+        const res = await fetch("https://automaton8n.eko.in/webhook/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName })
@@ -564,4 +564,5 @@
   </script>
 </body>
 </html>
+
 
