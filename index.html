@@ -2,294 +2,768 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Go-Live Admin - Onboarding</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go-Live - Multi-Slide Onboarding Form</title>
   <style>
-    /* ===== Global Reset ===== */
+    /* ---- Clean Yellow & White Theme ---- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fa;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    /* ===== Container ===== */
-    .container {
-      width: 100%;
-      max-width: 480px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    }
-
-    h1, h2, h3 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    h1 { color: #2c3e50; }
-
-    /* ===== Forms ===== */
-    form { margin-bottom: 20px; }
-    input[type="text"], input[type="password"], input[type="email"] {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      background: #3498db;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.3s ease;
-    }
-    button:hover { background: #2980b9; }
-    button:disabled { background: #aaa; cursor: not-allowed; }
-
-    /* ===== Progress Bar ===== */
-    .progress-container {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fffbeb 100%);
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
-      margin: 20px 0;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #374151;
+      overflow-x: hidden;
     }
-    .progress-step {
-      width: 22%;
-      height: 6px;
-      background: #ddd;
-      border-radius: 3px;
+    .container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(251, 191, 36, 0.2);
+      border-radius: 20px;
+      padding: 20px 40px 40px 40px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 20px 40px rgba(251, 191, 36, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.8);
+      max-height: 90vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .main-title { 
+      text-align: center; 
+      font-size: 32px; 
+      font-weight: 800; 
+      margin-bottom: 10px; 
+      background: linear-gradient(135deg, #f59e0b, #eab308); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      background-clip: text; 
+      letter-spacing: -0.5px;
+    }
+    .sub-heading {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+    
+    /* Login Page Styles */
+    .login-container {
+      text-align: center;
+    }
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .login-form input {
+      width: 100%;
+      padding: 15px 20px;
+      margin: 10px 0;
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-radius: 12px;
+      color: #374151;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    .login-form input:focus {
+      outline: none;
+      border-color: #eab308;
+      box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+      background: white;
+    }
+    .login-form input::placeholder {
+      color: #9ca3af;
+    }
+    .login-btn, .request-id-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      margin: 10px 0;
+    }
+    .login-btn {
+      background: #eab308;
+      color: white;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    .login-btn:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.3);
+    }
+    .request-id-btn {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .request-id-btn:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .error-message {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      border: 1px solid #fecaca;
+    }
+    .divider {
+      margin: 25px 0;
+      text-align: center;
+      color: #9ca3af;
       position: relative;
     }
-    .progress-step.active,
-    .progress-step.completed { background: #3498db; }
-    .progress-step::after {
-      content: attr(data-step);
+    .divider::before {
+      content: '';
       position: absolute;
-      top: -22px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 14px;
-      color: #555;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e5e7eb;
     }
-
-    /* ===== Slides ===== */
-    .slide { display: none; }
-    .slide.active { display: block; }
-
-    /* ===== Messages ===== */
-    .success { color: green; margin-top: 10px; }
-    .error { color: red; margin-top: 10px; }
-    .output-box {
-      border: 1px solid #ccc;
-      background: #fafafa;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 14px;
+    .divider span {
+      background: white;
+      padding: 0 15px;
+      position: relative;
     }
-
-    /* ===== Extra Controls ===== */
-    .update-container {
-      display: flex;
-      margin-top: 10px;
-      gap: 10px;
+    
+    /* Main App Styles */
+    .main-app {
+      display: none;
     }
-    .update-container input { flex: 1; }
+    .main-app.active {
+      display: block;
+    }
+    
+    .progress-bar { display: flex; justify-content: space-between; margin-bottom: 40px; position: relative; }
+    .progress-bar::before { 
+      content: ''; 
+      position: absolute; 
+      top: 15px; 
+      left: 15px; 
+      right: 15px; 
+      height: 2px; 
+      background: #fef3c7; 
+      z-index: 1; 
+      border-radius: 1px;
+    }
+    .step { 
+      width: 30px; 
+      height: 30px; 
+      border-radius: 50%; 
+      background: white; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 14px; 
+      font-weight: 600; 
+      position: relative; 
+      z-index: 2; 
+      transition: all 0.3s ease;
+      border: 2px solid #fef3c7;
+      color: #9ca3af;
+    }
+    .step.active { 
+      background: #eab308; 
+      border-color: #eab308;
+      color: white;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
+    }
+    .step.completed { 
+      background: #10b981; 
+      border-color: #10b981;
+      color: white;
+    }
+    .slides-container { position: relative; width: 100%; min-height: 500px; border-radius: 15px; overflow-x: hidden; }
+    .slide { 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      min-height: 500px; 
+      padding: 30px; 
+      box-sizing: border-box; 
+      opacity: 0; 
+      transform: translateX(100%); 
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+      background: white; 
+      border-radius: 15px; 
+      border: 1px solid #fef3c7; 
+      overflow-y: auto; 
+      max-height: 70vh; 
+      overflow-x: hidden; 
+    }
+    .slide.active { opacity: 1; transform: translateX(0); position: relative; }
+    .slide.prev { opacity: 0; transform: translateX(-100%); }
+    .slide.next { opacity: 0; transform: translateX(100%); }
+    .slide.submitted { 
+      background: #fefce8; 
+      border-color: #eab308; 
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.1); 
+    }
+    h3 { 
+      font-size: 24px; 
+      font-weight: 700; 
+      margin-bottom: 8px; 
+      text-align: center; 
+      color: #374151;
+    }
+    .subtitle { 
+      text-align: center; 
+      color: #6b7280; 
+      margin-bottom: 30px; 
+      font-size: 14px; 
+    }
+    form { margin-bottom: 25px; }
+    label { 
+      display: block; 
+      margin-bottom: 20px; 
+      font-weight: 500; 
+      color: #374151; 
+    }
+    input[type="tel"], input[type="email"], input[type="text"] {
+      width: 100%; 
+      padding: 15px 20px; 
+      margin-top: 8px; 
+      background: #fefce8; 
+      border: 1px solid #fde047; 
+      border-radius: 12px; 
+      color: #374151; 
+      font-size: 16px; 
+      transition: all 0.3s ease;
+    }
+    input:focus { 
+      outline: none; 
+      border-color: #eab308; 
+      box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1); 
+      background: white; 
+    }
+    input::placeholder { color: #9ca3af; }
+    button[type="submit"], .next-btn, #submitPanChange, #newOnboarding {
+      width: 100%; 
+      padding: 15px; 
+      border-radius: 12px; 
+      font-size: 16px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      border: none;
+    }
+    button[type="submit"] { 
+      background: #eab308; 
+      color: white; 
+      margin-top: 10px; 
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    button[type="submit"]:hover { 
+      background: #d97706;
+      transform: translateY(-1px); 
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.3); 
+    }
+    button[type="submit"]:disabled {
+      background: #10b981;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+    .next-btn { 
+      background: #f9fafb; 
+      border: 1px solid #e5e7eb; 
+      color: #9ca3af; 
+      margin-top: 15px; 
+      cursor: not-allowed;
+    }
+    .next-btn.enabled { 
+      background: #eab308; 
+      color: white;
+      border-color: #eab308;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    .next-btn.enabled:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.3);
+    }
+    #submitPanChange {
+      background: #eab308;
+      color: white;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    #submitPanChange:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.3);
+    }
+    #submitPanChange:disabled {
+      background: #10b981;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+    #newOnboarding {
+      background: #eab308;
+      color: white;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    #newOnboarding:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.3);
+    }
+    .output { 
+      background: #fefce8; 
+      border: 1px solid #fde047; 
+      border-radius: 12px; 
+      padding: 15px; 
+      margin: 20px 0; 
+      font-family: 'Courier New', monospace; 
+      font-size: 12px; 
+      color: #374151; 
+      white-space: pre-wrap; 
+      word-break: break-all; 
+      max-height: 200px; 
+      overflow-y: auto; 
+    }
+    
+    /* Custom checkbox styling */
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      accent-color: #eab308;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #fef3c7;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #eab308;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d97706;
+    }
+    
+    /* Clean focus states */
+    button:focus-visible {
+      outline: 2px solid #eab308;
+      outline-offset: 2px;
+    }
+    
+    /* Form field focus enhancement */
+    label:focus-within {
+      color: #eab308;
+    }
+    
+    /* Additional clean styling */
+    .slide {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .container {
+      box-shadow: 0 10px 25px rgba(234, 179, 8, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <h1 class="main-title">Go-Live Admin</h1>
+    <h2 class="sub-heading">Eloka Assistance Tool</h2>
 
-    <!-- Login Section -->
-    <div id="login-section">
-      <h1>Go-Live Admin Login</h1>
-      <form id="login-form">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-      </form>
-      <p id="login-error" class="error"></p>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+      <div class="login-form">
+        <form id="loginForm">
+          <input type="email" id="username" placeholder="Enter your username" required>
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <button type="submit" class="login-btn">Sign In</button>
+        </form>
+        
+        <div class="divider">
+          <span>or</span>
+        </div>
+        
+        <button class="request-id-btn" id="requestIdBtn">Request New ID</button>
+        
+        <div id="loginError" class="error-message" style="display: none;"></div>
+      </div>
     </div>
 
-    <!-- Onboarding Section -->
-    <div id="onboarding-section" style="display: none;">
-      <h2>Onboarding Form</h2>
-
-      <!-- Progress -->
-      <div class="progress-container">
-        <div class="progress-step" data-step="1"></div>
-        <div class="progress-step" data-step="2"></div>
-        <div class="progress-step" data-step="3"></div>
-        <div class="progress-step" data-step="4"></div>
+    <!-- Main Application (hidden initially) -->
+    <div class="main-app" id="mainApp">
+      <div class="progress-bar">
+        <div class="step active" id="step1">1</div>
+        <div class="step" id="step2">2</div>
+        <div class="step" id="step3">3</div>
+        <div class="step" id="step4">4</div>
       </div>
 
-      <!-- Slide 1: Mobile -->
-      <div class="slide active" id="slide1">
-        <h3>Step 1: Mobile Number</h3>
-        <form id="form1">
-          <input type="text" id="mobile" placeholder="Enter 10-digit mobile number" required>
-          <button type="submit">Verify Mobile</button>
-        </form>
-        <div class="output-box" id="output1"></div>
-      </div>
+      <div class="slides-container">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide1">
+          <h3>Enter Mobile Number</h3>
+          <p class="subtitle">We'll use this to verify your identity</p>
+          <form id="form1">
+            <label>Mobile Number
+              <input type="tel" name="mobile" pattern="[6-9][0-9]{9}" maxlength="10" minlength="10" required placeholder="Enter 10-digit mobile number">
+            </label>
+            <button type="submit">Verify Mobile</button>
+          </form>
+          <div class="output" id="output1"></div>
+          <button class="next-btn" id="next1" disabled>Continue</button>
+        </div>
 
-      <!-- Slide 2: Email -->
-      <div class="slide" id="slide2">
-        <h3>Step 2: Email</h3>
-        <form id="form2">
-          <input type="email" id="email" placeholder="Enter email address" required>
-          <button type="submit">Verify Email</button>
-        </form>
-        <div class="output-box" id="output2"></div>
-      </div>
+        <!-- Slide 2 - Email Address -->
+        <div class="slide" id="slide2">
+          <h3>Enter Email Address</h3>
+          <p class="subtitle">We'll send important updates to this address</p>
+          <form id="form2">
+            <label>Email Address
+              <input type="email" name="email" required placeholder="example@email.com">
+            </label>
+            <button type="submit">Verify Email</button>
+          </form>
+          <div class="output" id="output2"></div>
+          <button class="next-btn" id="next2" disabled>Continue</button>
+        </div>
 
-      <!-- Slide 3: PAN -->
-      <div class="slide" id="slide3">
-        <h3>Step 3: PAN Number</h3>
-        <form id="form3">
-          <input type="text" id="pan" placeholder="Enter PAN number (ABCDE1234F)" required>
-          <button type="submit">Verify PAN</button>
-        </form>
-        <div class="output-box" id="output3"></div>
-        <div class="update-container">
-          <input type="text" id="orgName" placeholder="Update Org Name">
-          <button id="submitPanChange">Update Org Name</button>
+        <!-- Slide 3 - PAN Details -->
+        <div class="slide" id="slide3">
+          <h3>Enter PAN Details</h3>
+          <form id="form3">
+            <label>PAN Number
+              <input type="text" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" minlength="10" style="text-transform:uppercase" required placeholder="ABCDE1234F">
+            </label>
+            <button type="submit">Verify PAN</button>
+          </form>
+          <div class="output" id="output3"></div>
+          <div id="panNameSection" style="display:none;">
+            <label>Change Org Name (optional)
+              <input type="text" name="changePanName" placeholder="Enter new name">
+            </label>
+            <button id="submitPanChange">Update Org Name</button>
+          </div>
+          <button class="next-btn" id="next3" disabled>Continue</button>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" id="slide4">
+          <h3>Final Confirmation</h3>
+          <form id="form4">
+            <div>
+              <input type="checkbox" name="confirm" required>
+              <label>I confirm that all information provided is accurate</label>
+            </div>
+            <button type="submit">Complete Onboarding</button>
+          </form>
+          <div class="output" id="output4"></div>
+          <button id="newOnboarding" style="display:none;">Start New Onboarding</button>
         </div>
       </div>
-
-      <!-- Slide 4: Confirmation -->
-      <div class="slide" id="slide4">
-        <h3>Step 4: Confirmation</h3>
-        <form id="form4">
-          <button type="submit">Complete Onboarding</button>
-        </form>
-        <div class="output-box" id="output4"></div>
-      </div>
-
-      <!-- Reset -->
-      <button id="newOnboarding" style="display: none; margin-top: 20px;">Start New Onboarding</button>
     </div>
   </div>
 
   <script>
-    /* ========= LOGIN ========= */
-    const loginForm = document.getElementById("login-form");
-    const loginError = document.getElementById("login-error");
-    const loginSection = document.getElementById("login-section");
-    const onboardingSection = document.getElementById("onboarding-section");
+    // Hardcoded credentials with SQL injection protection
+    const VALID_CREDENTIALS = {
+      username: 'shlokgoswami58@gmail.com',
+      password: 'Gunjan!9'
+    };
 
-    const validCredentials = { username: "admin", password: "password123" };
+    // Sanitize input to prevent SQL injection
+    function sanitizeInput(input) {
+      if (typeof input !== 'string') return '';
+      
+      // Remove dangerous characters and patterns
+      return input
+        .replace(/['"\\]/g, '') // Remove quotes and backslashes
+        .replace(/(--)|(\/\*)|(\*\/)/g, '') // Remove SQL comment patterns
+        .replace(/(union|select|insert|update|delete|drop|create|alter|exec|execute)/gi, '') // Remove SQL keywords
+        .trim()
+        .substring(0, 255); // Limit length
+    }
 
-    loginForm.addEventListener("submit", e => {
+    // Login functionality
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const loginPage = document.getElementById('loginPage');
+    const mainApp = document.getElementById('mainApp');
+
+    loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const user = sanitize(document.getElementById("username").value);
-      const pass = sanitize(document.getElementById("password").value);
-
-      if (user === validCredentials.username && pass === validCredentials.password) {
-        loginSection.style.display = "none";
-        onboardingSection.style.display = "block";
+      
+      const username = sanitizeInput(document.getElementById('username').value);
+      const password = sanitizeInput(document.getElementById('password').value);
+      
+      // Clear previous errors
+      loginError.style.display = 'none';
+      
+      // Validate credentials
+      if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+        // Successful login
+        loginPage.style.display = 'none';
+        mainApp.classList.add('active');
       } else {
-        loginError.textContent = "Invalid credentials!";
+        // Failed login
+        loginError.textContent = 'Invalid username or password. Please try again.';
+        loginError.style.display = 'block';
+        
+        // Clear form
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
       }
     });
 
-    function sanitize(str) {
-      return str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    }
+    // Request ID button functionality
+    document.getElementById('requestIdBtn').addEventListener('click', () => {
+      alert('Request ID functionality will be configured later. Please contact your administrator.');
+    });
 
-    /* ========= ONBOARDING FLOW ========= */
-    const slides = document.querySelectorAll(".slide");
-    const steps = document.querySelectorAll(".progress-step");
-    const newOnboardingBtn = document.getElementById("newOnboarding");
-
-    function showSlide(n) {
-      slides.forEach((s,i) => s.classList.toggle("active", i===n-1));
-      updateProgress(n);
-    }
-
-    function updateProgress(step) {
-      steps.forEach((s,i)=>{
-        s.classList.remove("active","completed");
-        if (i < step-1) s.classList.add("completed");
-        if (i === step-1) s.classList.add("active");
+    // Main application functionality (existing code)
+    function updateProgress(currentStep) {
+      document.querySelectorAll('.step').forEach((step, index) => {
+        step.classList.remove('active', 'completed');
+        if (index + 1 < currentStep) step.classList.add('completed');
+        else if (index + 1 === currentStep) step.classList.add('active');
       });
     }
 
-    /* ========= FORM HANDLERS ========= */
-    setupForm("form1", "mobile", "output1", 2, /^\d{10}$/, "Enter valid 10-digit mobile number", "https://hook1.example.com");
-    setupForm("form2", "email", "output2", 3, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Enter valid email address", "https://hook2.example.com");
-    setupForm("form3", "pan", "output3", 4, /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Enter valid PAN (ABCDE1234F)", "https://hook3.example.com");
-    setupForm("form4", null, "output4", null, null, null, "https://hook4.example.com");
+    function markSlideAsSubmitted(slideId, nextBtnId) {
+      const slide = document.getElementById(slideId);
+      const nextBtn = document.getElementById(nextBtnId);
+      slide.classList.add('submitted');
+      nextBtn.classList.add('enabled');
+      nextBtn.disabled = false;
+      const form = slide.querySelector('form');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '✓ Verified';
+    }
 
-    function setupForm(formId, inputId, outputId, nextStep, regex, errorMsg, webhookUrl) {
-      const form = document.getElementById(formId);
-      const input = inputId ? document.getElementById(inputId) : null;
-      const output = document.getElementById(outputId);
+    function transitionToSlide(currentSlideId, nextSlideId, stepNumber) {
+      const currentSlide = document.getElementById(currentSlideId);
+      const nextSlide = document.getElementById(nextSlideId);
+      currentSlide.classList.remove('active');
+      currentSlide.classList.add('prev');
+      setTimeout(() => {
+        nextSlide.classList.remove('next');
+        nextSlide.classList.add('active');
+        updateProgress(stepNumber);
+      }, 100);
+    }
 
-      form.addEventListener("submit", async e=>{
-        e.preventDefault();
-        const btn = form.querySelector("button");
-        btn.disabled = true;
-        btn.textContent = "Processing...";
+    // Global storage
+    let userMobile = "";
+    let userEmail = "";
+    let userPan = "";
 
-        if (input && regex && !regex.test(input.value)) {
-          output.innerHTML = `<p class="error">${errorMsg}</p>`;
-          resetButton(btn, formId);
-          return;
-        }
+    // Slide 1 - Mobile Number
+    const form1 = document.getElementById("form1");
+    const output1 = document.getElementById("output1");
+    const next1 = document.getElementById("next1");
+    
+    form1.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form1);
+      const payload = Object.fromEntries(formData);
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/af583ebe-6fcd-4c46-8c9e-229aadc83d9d", {
+          method: "POST", 
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        output1.innerText = JSON.stringify(result, null, 2);
+        userMobile = payload.mobile;
+        markSlideAsSubmitted("slide1", "next1");
+        next1.onclick = () => transitionToSlide("slide1", "slide2", 2);
+      } catch (error) { 
+        output1.innerText = "Error: " + error.message; 
+      }
+    });
 
-        try {
-          const res = await fetch(webhookUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(input?{[inputId]:input.value}:{})});
-          const data = await res.json();
-          output.innerHTML = `<p class="success">${JSON.stringify(data)}</p>`;
-          if (nextStep) setTimeout(()=>showSlide(nextStep), 800);
-          else newOnboardingBtn.style.display = "block";
-        } catch(err) {
-          output.innerHTML = `<p class="error">Webhook failed</p>`;
-        }
-        resetButton(btn, formId);
+    // Slide 2 - Email Address
+    const form2 = document.getElementById("form2");
+    const output2 = document.getElementById("output2");
+    const next2 = document.getElementById("next2");
+    
+    form2.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form2);
+      let payload = Object.fromEntries(formData);
+      payload.mobile = userMobile;
+      userEmail = payload.email;
+      try {
+        output2.innerText = 'Email Stored: ' + userEmail;
+        markSlideAsSubmitted("slide2", "next2");
+        next2.onclick = () => transitionToSlide("slide2", "slide3", 3);
+      } catch (error) { 
+        output2.innerText = "Error: " + error.message; 
+      }
+    });
+
+    // Slide 3 - PAN Details
+    const form3 = document.getElementById("form3");
+    const output3 = document.getElementById("output3");
+    const next3 = document.getElementById("next3");
+    const panNameSection = document.getElementById("panNameSection");
+    const submitPanChange = document.getElementById("submitPanChange");
+    let panPayload = {};
+
+    form3.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form3);
+      panPayload = Object.fromEntries(formData);
+      panPayload.mobile = userMobile;
+      panPayload.email = userEmail;
+      userPan = panPayload.pan;
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/89dfc330-4fad-4f3c-a4b7-75d103972c4e", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(panPayload)
+        });
+        const result = await res.json();
+        output3.innerText = JSON.stringify(result, null, 3);
+
+        panNameSection.style.display = "block";
+
+        const slide3 = document.getElementById("slide3");
+        slide3.classList.add('submitted');
+        const submitBtn = form3.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ PAN Verified';
+
+        next3.classList.add('enabled');
+        next3.disabled = false;
+        next3.onclick = () => transitionToSlide("slide3", "slide4", 4);
+      } catch (error) {
+        output3.innerText = "Error: " + error.message;
+      }
+    });
+
+    submitPanChange.addEventListener("click", async () => {
+      const newPanName = panNameSection.querySelector("input[name='changePanName']").value;
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/7bd4d7cd-cf55-4b6d-b458-5e688c60cb56", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pan: panPayload.pan, changePanName: newPanName, panPayload })
+        });
+        const result = await res.json();
+        output3.innerText = JSON.stringify(result, null, 3);
+
+        submitPanChange.disabled = true;
+        submitPanChange.textContent = '✓ Name Updated';
+      } catch (error) {
+        output3.innerText = "Error: " + error.message;
+      }
+    });
+
+    // Slide 4: Final Confirmation
+    const form4 = document.getElementById("form4");
+    const output4 = document.getElementById("output4");
+    const newOnboarding = document.getElementById("newOnboarding");
+
+    form4.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form4);
+      const checkPayload = {
+        mobile: userMobile,
+        email: userEmail,
+        pan: userPan,
+        confirm: formData.get('confirm') ? true : false
+      };
+      
+      try {
+        const res = await fetch("https://automaton8n.eko.in/webhook-test/2a5b2cac-978d-40f7-bb4d-d820510edc22", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(checkPayload)
+        });
+        const result = await res.json();
+        output4.innerText = JSON.stringify(result, null, 2);
+
+        const slide4 = document.getElementById("slide4");
+        slide4.classList.add('submitted');
+        const submitBtn = form4.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✓ Onboarding Complete';
+        newOnboarding.style.display = "inline-block";
+      } catch (error) {
+        output4.innerText = "Error: " + error.message;
+      }
+    });
+
+    // Restart onboarding
+    newOnboarding.addEventListener("click", () => {
+      // Reset global variables
+      userMobile = "";
+      userEmail = "";
+      userPan = "";
+      panPayload = {};
+
+      // Reset all slides
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active', 'prev', 'next', 'submitted');
       });
-    }
+      document.getElementById("slide1").classList.add("active");
 
-    function resetButton(btn, formId) {
-      setTimeout(()=>{
-        if (formId==="form1") btn.textContent="Verify Mobile";
-        if (formId==="form2") btn.textContent="Verify Email";
-        if (formId==="form3") btn.textContent="Verify PAN";
-        if (formId==="form4") btn.textContent="Complete Onboarding";
-        btn.disabled=false;
-      },800);
-    }
+      // Reset forms and buttons
+      document.querySelectorAll("form").forEach(f => f.reset());
+      document.querySelectorAll(".output").forEach(o => o.innerText = "");
+      document.getElementById("panNameSection").style.display = "none";
 
-    /* ========= ORG NAME UPDATE ========= */
-    const submitPanChange=document.getElementById("submitPanChange");
-    submitPanChange.addEventListener("click",async ()=>{
-      const org=document.getElementById("orgName").value.trim();
-      if(!org){alert("Enter org name");return;}
-      submitPanChange.disabled=true;
-      submitPanChange.textContent="Updating...";
-      try{
-        const res=await fetch("https://hook-org-update.example.com",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({orgName:org})});
-        const data=await res.json();
-        alert("Org name updated: "+JSON.stringify(data));
-      }catch(err){alert("Failed updating org name");}
-      submitPanChange.disabled=false;
-      submitPanChange.textContent="Update Org Name";
+      // Reset next buttons
+      document.querySelectorAll(".next-btn").forEach(b => {
+        b.disabled = true;
+        b.classList.remove('enabled');
+        b.onclick = null;
+      });
+
+      // Reset submit buttons
+      document.querySelectorAll('button[type="submit"]').forEach(btn => {
+        btn.disabled = false;
+        const form = btn.closest('form');
+        if (form && form.id === 'form1') btn.textContent = 'Verify Mobile';
+        else if (form && form.id === 'form2') btn.textContent = 'Verify Email';
+        else if (form && form.id === 'form3') btn.textContent = 'Verify PAN';
+        else if (form && form.id === 'form4') btn.textContent = 'Complete Onboarding';
+      });
+
+      // Reset PAN change button
+      const panChangeBtn = document.getElementById('submitPanChange');
+      if (panChangeBtn) {
+        panChangeBtn.disabled = false;
+        panChangeBtn.textContent = 'Update Org Name';
+      }
+
+      newOnboarding.style.display = "none";
+      updateProgress(1);
     });
 
-    /* ========= RESET FLOW ========= */
-    newOnboardingBtn.addEventListener("click", ()=>{
-      slides.forEach(s=>s.classList.remove("active"));
-      document.querySelectorAll("form").forEach(f=>f.reset());
-      document.querySelectorAll(".output-box").forEach(o=>o.innerHTML="");
-      showSlide(1);
-      newOnboardingBtn.style.display="none";
-    });
+    // Initialize progress bar
+    updateProgress(1);
   </script>
 </body>
 </html>
