@@ -36,13 +36,119 @@
       text-align: center; 
       font-size: 32px; 
       font-weight: 800; 
-      margin-bottom: 30px; 
+      margin-bottom: 10px; 
       background: linear-gradient(135deg, #f59e0b, #eab308); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
       background-clip: text; 
       letter-spacing: -0.5px;
     }
+    .sub-heading {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+    
+    /* Login Page Styles */
+    .login-container {
+      text-align: center;
+    }
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .login-form input {
+      width: 100%;
+      padding: 15px 20px;
+      margin: 10px 0;
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-radius: 12px;
+      color: #374151;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    .login-form input:focus {
+      outline: none;
+      border-color: #eab308;
+      box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+      background: white;
+    }
+    .login-form input::placeholder {
+      color: #9ca3af;
+    }
+    .login-btn, .request-id-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      margin: 10px 0;
+    }
+    .login-btn {
+      background: #eab308;
+      color: white;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+    }
+    .login-btn:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(234, 179, 8, 0.3);
+    }
+    .request-id-btn {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .request-id-btn:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .error-message {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      border: 1px solid #fecaca;
+    }
+    .divider {
+      margin: 25px 0;
+      text-align: center;
+      color: #9ca3af;
+      position: relative;
+    }
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    .divider span {
+      background: white;
+      padding: 0 15px;
+      position: relative;
+    }
+    
+    /* Main App Styles (existing styles) */
+    .main-app {
+      display: none;
+    }
+    .main-app.active {
+      display: block;
+    }
+    
     .progress-bar { display: flex; justify-content: space-between; margin-bottom: 40px; position: relative; }
     .progress-bar::before { 
       content: ''; 
@@ -282,80 +388,158 @@
 <body>
   <div class="container">
     <h1 class="main-title">Go-Live Admin</h1>
-    <h2 class="sub-heading">Eloka Assistance tool</h2> 
+    <h2 class="sub-heading">Eloka Assistance Tool</h2>
 
-    <div class="progress-bar">
-      <div class="step active" id="step1">1</div>
-      <div class="step" id="step2">2</div>
-      <div class="step" id="step3">3</div>
-      <div class="step" id="step4">4</div>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+      <div class="login-form">
+        <form id="loginForm">
+          <input type="email" id="username" placeholder="Enter your username" required>
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <button type="submit" class="login-btn">Sign In</button>
+        </form>
+        
+        <div class="divider">
+          <span>or</span>
+        </div>
+        
+        <button class="request-id-btn" id="requestIdBtn">Request New ID</button>
+        
+        <div id="loginError" class="error-message" style="display: none;"></div>
+      </div>
     </div>
 
-    <div class="slides-container">
-      <!-- Slide 1 -->
-      <div class="slide active" id="slide1">
-        <h3>Enter Mobile Number</h3>
-        <p class="subtitle">We'll use this to verify your identity</p>
-        <form id="form1">
-          <label>Mobile Number
-            <input type="tel" name="mobile" pattern="[6-9][0-9]{9}" maxlength="10" minlength="10" required placeholder="Enter 10-digit mobile number">
-          </label>
-          <button type="submit">Verify Mobile</button>
-        </form>
-        <div class="output" id="output1"></div>
-        <button class="next-btn" id="next1" disabled>Continue</button>
+    <!-- Main Application (hidden initially) -->
+    <div class="main-app" id="mainApp">
+      <div class="progress-bar">
+        <div class="step active" id="step1">1</div>
+        <div class="step" id="step2">2</div>
+        <div class="step" id="step3">3</div>
+        <div class="step" id="step4">4</div>
       </div>
 
-      <!-- Slide 2 - Email Address -->
-      <div class="slide" id="slide2">
-        <h3>Enter Email Address</h3>
-        <p class="subtitle">We'll send important updates to this address</p>
-        <form id="form2">
-          <label>Email Address
-            <input type="email" name="email" required placeholder="example@email.com">
-          </label>
-          <button type="submit">Verify Email</button>
-        </form>
-        <div class="output" id="output2"></div>
-        <button class="next-btn" id="next2" disabled>Continue</button>
-      </div>
-
-      <!-- Slide 3 - PAN Details -->
-      <div class="slide" id="slide3">
-        <h3>Enter PAN Details</h3>
-        <form id="form3">
-          <label>PAN Number
-            <input type="text" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" minlength="10" style="text-transform:uppercase" required placeholder="ABCDE1234F">
-          </label>
-          <button type="submit">Verify PAN</button>
-        </form>
-        <div class="output" id="output3"></div>
-        <div id="panNameSection" style="display:none;">
-          <label>Change Org Name (optional)
-            <input type="text" name="changePanName" placeholder="Enter new name">
-          </label>
-          <button id="submitPanChange">Update Org Name</button>
+      <div class="slides-container">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide1">
+          <h3>Enter Mobile Number</h3>
+          <p class="subtitle">We'll use this to verify your identity</p>
+          <form id="form1">
+            <label>Mobile Number
+              <input type="tel" name="mobile" pattern="[6-9][0-9]{9}" maxlength="10" minlength="10" required placeholder="Enter 10-digit mobile number">
+            </label>
+            <button type="submit">Verify Mobile</button>
+          </form>
+          <div class="output" id="output1"></div>
+          <button class="next-btn" id="next1" disabled>Continue</button>
         </div>
-        <button class="next-btn" id="next3" disabled>Continue</button>
-      </div>
 
-      <!-- Slide 4 -->
-      <div class="slide" id="slide4">
-        <h3>Final Confirmation</h3>
-        <form id="form4">
-          <div>
-            <input type="checkbox" name="confirm" required>
-            <label>I confirm that all information provided is accurate</label>
+        <!-- Slide 2 - Email Address -->
+        <div class="slide" id="slide2">
+          <h3>Enter Email Address</h3>
+          <p class="subtitle">We'll send important updates to this address</p>
+          <form id="form2">
+            <label>Email Address
+              <input type="email" name="email" required placeholder="example@email.com">
+            </label>
+            <button type="submit">Verify Email</button>
+          </form>
+          <div class="output" id="output2"></div>
+          <button class="next-btn" id="next2" disabled>Continue</button>
+        </div>
+
+        <!-- Slide 3 - PAN Details -->
+        <div class="slide" id="slide3">
+          <h3>Enter PAN Details</h3>
+          <form id="form3">
+            <label>PAN Number
+              <input type="text" name="pan" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" minlength="10" style="text-transform:uppercase" required placeholder="ABCDE1234F">
+            </label>
+            <button type="submit">Verify PAN</button>
+          </form>
+          <div class="output" id="output3"></div>
+          <div id="panNameSection" style="display:none;">
+            <label>Change Org Name (optional)
+              <input type="text" name="changePanName" placeholder="Enter new name">
+            </label>
+            <button id="submitPanChange">Update Org Name</button>
           </div>
-          <button type="submit">Complete Onboarding</button>
-        </form>
-        <div class="output" id="output4"></div>
-        <button id="newOnboarding" style="display:none;">Start New Onboarding</button>
+          <button class="next-btn" id="next3" disabled>Continue</button>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" id="slide4">
+          <h3>Final Confirmation</h3>
+          <form id="form4">
+            <div>
+              <input type="checkbox" name="confirm" required>
+              <label>I confirm that all information provided is accurate</label>
+            </div>
+            <button type="submit">Complete Onboarding</button>
+          </form>
+          <div class="output" id="output4"></div>
+          <button id="newOnboarding" style="display:none;">Start New Onboarding</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Hardcoded credentials with SQL injection protection
+    const VALID_CREDENTIALS = {
+      username: 'shlokgoswami58@gmail.com',
+      password: 'Gunjan!9'
+    };
+
+    // Sanitize input to prevent SQL injection
+    function sanitizeInput(input) {
+      if (typeof input !== 'string') return '';
+      
+      // Remove dangerous characters and patterns
+      return input
+        .replace(/['"\\]/g, '') // Remove quotes and backslashes
+        .replace(/(--)|(\/\*)|(\*\/)/g, '') // Remove SQL comment patterns
+        .replace(/(union|select|insert|update|delete|drop|create|alter|exec|execute)/gi, '') // Remove SQL keywords
+        .trim()
+        .substring(0, 255); // Limit length
+    }
+
+    // Login functionality
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const loginPage = document.getElementById('loginPage');
+    const mainApp = document.getElementById('mainApp');
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const username = sanitizeInput(document.getElementById('username').value);
+      const password = sanitizeInput(document.getElementById('password').value);
+      
+      // Clear previous errors
+      loginError.style.display = 'none';
+      
+      // Validate credentials
+      if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+        // Successful login
+        loginPage.style.display = 'none';
+        mainApp.classList.add('active');
+      } else {
+        // Failed login
+        loginError.textContent = 'Invalid username or password. Please try again.';
+        loginError.style.display = 'block';
+        
+        // Clear form
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+      }
+    });
+
+    // Request ID button functionality
+    document.getElementById('requestIdBtn').addEventListener('click', () => {
+      alert('Request ID functionality will be configured later. Please contact your administrator.');
+    });
+
+    // Main application functionality (existing code)
     function updateProgress(currentStep) {
       document.querySelectorAll('.step').forEach((step, index) => {
         step.classList.remove('active', 'completed');
@@ -569,14 +753,4 @@
       panChangeBtn.disabled = false;
       panChangeBtn.textContent = 'Update PAN Name';
 
-      newOnboarding.style.display = "none";
-      updateProgress(1);
-    });
-
-    // Initialize progress bar
-    updateProgress(1);
-  </script>
-</body>
-</html>
-
-
+      newOnboarding
